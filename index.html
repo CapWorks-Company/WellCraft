@@ -492,11 +492,14 @@
   }
   .grades-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
     text-align: left;
   }
-  @media (max-width: 780px) {
+  @media (max-width: 980px) {
+    .grades-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
     .grades-grid { grid-template-columns: 1fr; }
   }
   .grade-card {
@@ -519,6 +522,7 @@
     font-size: 1rem;
     color: var(--ink);
   }
+  .grade-card[data-tier="none"] .grade-card-head { background: #9aa3ad; }
   .grade-card[data-tier="bronze"] .grade-card-head { background: #c98a5b; }
   .grade-card[data-tier="argent"] .grade-card-head { background: #c9d3dc; }
   .grade-card[data-tier="or"] .grade-card-head { background: var(--gold); }
@@ -690,32 +694,46 @@
   // ============================================================
   const GRADES = [
     {
+      name: "Aucun",
+      tier: "none",
+      perks: [
+        "Délai de téléportation définis sur 5 secondes",
+        "Home disponible fixé à 2",
+        "Cooldown de téléportation sur 1 minute",
+        "Mise maximum au coinflip à 1 000 Coins"
+      ]
+    },
+    {
       name: "WellPass",
       tier: "bronze",
       perks: [
-        "Accès prioritaire aux mini-jeux",
-        "Tag [WellPass] dans le chat",
-        "Kit de démarrage amélioré"
+        "Délai de téléportation réduit à 3 secondes",
+        "Home disponible augmenté à 3",
+        "Cooldown de téléportation réduit à 45 secondes",
+        "Claim bonus : +5",
+        "Mise maximum au coinflip augmenté à 5 000 Coins"
       ]
     },
     {
       name: "WellPro",
       tier: "argent",
       perks: [
-        "Tous les avantages WellPass",
-        "Slot de claim supplémentaire",
-        "Accès à /kit pro",
-        "Particules de déplacement"
+        "Délai de téléportation instantanné",
+        "Home disponible augmenté à 5",
+        "Cooldown de téléportation réduit à 25 secondes",
+        "Claim bonus : +10",
+        "Mise maximum au coinflip augmenté à 25 000 Coins"
       ]
     },
     {
       name: "WellPremium",
       tier: "or",
       perks: [
-        "Tous les avantages WellPro",
-        "Accès aux mondes VIP",
-        "Couleur de pseudo personnalisée",
-        "Support prioritaire"
+        "Délai de téléportation instantanné",
+        "Home disponible augmenté à infini",
+        "Cooldown de téléportation réduit à 10 secondes",
+        "Claim bonus : +20",
+        "Mise maximum au coinflip augmenté à infini"
       ]
     }
   ];
