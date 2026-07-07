@@ -41,6 +41,7 @@
     color: var(--parchment);
     font-family: 'Rubik', sans-serif;
     line-height: 1.5;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, .pixel {
@@ -52,6 +53,17 @@
 
   img { max-width: 100%; display: block; }
 
+  /* ---------- Bloc divider (séparateur pixel entre sections) ---------- */
+  .block-divider {
+    height: 14px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--green) 0px, var(--green) 14px,
+      #3d6e30 14px, #3d6e30 28px
+    );
+    box-shadow: inset 0 3px 0 rgba(255,255,255,0.15), inset 0 -3px 0 rgba(0,0,0,0.35);
+  }
+
   /* ---------- Nav ---------- */
   .nav {
     position: sticky;
@@ -62,13 +74,20 @@
     justify-content: space-between;
     gap: 1rem;
     padding: 0.75rem 1.5rem;
-    background: rgba(16, 27, 45, 0.88);
+    background: rgba(16, 27, 45, 0.9);
     backdrop-filter: blur(6px);
     border-bottom: 3px solid var(--ink);
   }
   .nav-brand { display: flex; align-items: center; gap: 0.6rem; }
-  .nav-brand img { width: 36px; height: 36px; border-radius: 6px; image-rendering: pixelated; }
+  .nav-brand img {
+    width: 36px; height: 36px; border-radius: 6px; image-rendering: pixelated;
+    animation: bob 3.2s ease-in-out infinite;
+  }
   .nav-brand span { font-size: 1rem; color: var(--gold); }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-3px) rotate(-3deg); }
+  }
   .nav-link {
     text-decoration: none;
     font-weight: 600;
@@ -80,23 +99,85 @@
   }
   .nav-link:hover, .nav-link:focus-visible { background: var(--bg-panel-light); color: var(--gold); }
 
+  /* ---------- Corner brackets (façon slot d'inventaire) ---------- */
+  .bracketed { position: relative; }
+  .bracketed::before, .bracketed::after {
+    content: "";
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: var(--gold);
+    border-style: solid;
+    opacity: 0.9;
+    pointer-events: none;
+  }
+  .bracketed::before {
+    top: -4px; left: -4px;
+    border-width: 3px 0 0 3px;
+  }
+  .bracketed::after {
+    bottom: -4px; right: -4px;
+    border-width: 0 3px 3px 0;
+  }
+
   /* ---------- Hero ---------- */
   .hero {
     position: relative;
-    min-height: 78vh;
-    display: flex;
-    align-items: flex-end;
-    background-image:
-      linear-gradient(180deg, rgba(16,27,45,0.15) 0%, rgba(16,27,45,0.55) 55%, var(--bg-deep) 100%),
-      url('banniere_1.png');
-    background-size: cover;
-    background-position: center 35%;
+    background: radial-gradient(ellipse at 50% -10%, #223a5e 0%, var(--bg-deep) 65%);
+    padding: 2rem 0 0;
+    overflow: hidden;
   }
+
+  .banner-frame {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+  .banner-frame-inner {
+    position: relative;
+    border: 4px solid var(--ink);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-hard), 0 0 0 3px var(--gold-deep) inset;
+  }
+  .banner-frame-inner img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .banner-frame-inner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(16,27,45,0.55) 100%);
+  }
+
+  /* Braises flottantes */
+  .embers { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+  .ember {
+    position: absolute;
+    bottom: -10px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--torch-lit);
+    box-shadow: 0 0 6px 1px rgba(255, 179, 71, 0.8);
+    animation: rise linear infinite;
+    opacity: 0;
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.9; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(-340px) translateX(var(--drift, 20px)); opacity: 0; }
+  }
+
   .hero-inner {
+    position: relative;
+    z-index: 2;
     width: 100%;
     max-width: 1080px;
     margin: 0 auto;
-    padding: 3rem 1.5rem 3.5rem;
+    padding: 2.25rem 1.5rem 3.5rem;
   }
   .hero-eyebrow {
     display: inline-block;
@@ -113,7 +194,6 @@
     font-size: 1.05rem;
     color: var(--parchment);
     margin: 0 0 2rem;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
   }
 
   /* ---------- Connect panel ---------- */
@@ -202,16 +282,21 @@
   .status-text strong { display: block; font-size: 1.1rem; color: var(--gold); }
   .status-text span { color: var(--parchment-dark); font-size: 0.8rem; }
 
-  /* ---------- Section band (banniere_2) ---------- */
+  /* ---------- Section band (banniere_2, ratio natif encadré) ---------- */
   .band {
-    background-image:
-      linear-gradient(180deg, rgba(16,27,45,0.65), rgba(16,27,45,0.65)),
-      url('banniere_2.png');
-    background-size: cover;
-    background-position: center;
     padding: 3.5rem 1.5rem;
     text-align: center;
+    background: var(--bg-deep);
   }
+  .band-banner {
+    max-width: 880px;
+    margin: 0 auto 2rem;
+    border: 4px solid var(--ink);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-hard), 0 0 0 3px var(--brick-deep) inset;
+  }
+  .band-banner img { width: 100%; height: auto; display: block; }
   .band h2 {
     font-size: 1.4rem;
     color: var(--gold);
@@ -246,9 +331,10 @@
     box-shadow: var(--shadow-hard);
     opacity: 0;
     transform: translateY(16px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.2s ease;
   }
   .card.visible { opacity: 1; transform: translateY(0); }
+  .card:hover { transform: translateY(-5px); box-shadow: 0 10px 0 rgba(0,0,0,0.35); }
   .card-icon {
     width: 42px; height: 42px;
     border-radius: 8px;
@@ -290,12 +376,20 @@
 </nav>
 
 <header class="hero" id="rejoindre">
+  <div class="embers" id="embers"></div>
+
+  <div class="banner-frame">
+    <div class="banner-frame-inner">
+      <img src="banniere_1.png" alt="Bannière WellCraft">
+    </div>
+  </div>
+
   <div class="hero-inner">
     <span class="hero-eyebrow pixel">SERVEUR MINECRAFT</span>
     <p class="hero-tagline">Survie, territoires et mini-jeux sur un monde qui grandit avec sa communauté. Copie l'adresse et rejoins la partie.</p>
 
     <div class="connect-panel">
-      <div class="ip-box">
+      <div class="ip-box bracketed">
         <div>
           <span class="ip-box-label">Adresse du serveur</span>
           <span class="ip-box-value" id="server-ip">play.wellcraft.fr</span>
@@ -303,7 +397,7 @@
         <button class="copy-btn" id="copy-btn" type="button">Copier l'IP</button>
       </div>
 
-      <div class="status-box">
+      <div class="status-box bracketed">
         <div class="torch offline" id="torch">
           <div class="torch-flame"></div>
           <div class="torch-stick"></div>
@@ -317,23 +411,30 @@
   </div>
 </header>
 
+<div class="block-divider"></div>
+
 <section class="band">
+  <div class="band-banner">
+    <img src="banniere_2.png" alt="Bannière secondaire WellCraft">
+  </div>
   <h2 class="pixel">Bâtissez, explorez, créez ensemble</h2>
   <p>WellCraft, c'est un monde de survie persistant où chaque territoire compte, et une arène de mini-jeux où on se retrouve entre deux sessions de construction.</p>
 </section>
 
+<div class="block-divider"></div>
+
 <section class="features">
-  <article class="card">
+  <article class="card bracketed">
     <div class="card-icon">⛏</div>
     <h3 class="pixel">SURVIE &amp; TERRITOIRES</h3>
     <p>Claim ta parcelle, monte ton économie, forme une équipe et défends ton territoire. Un monde qui reste à toi d'une session à l'autre.</p>
   </article>
-  <article class="card">
+  <article class="card bracketed">
     <div class="card-icon">🎮</div>
     <h3 class="pixel">MINI-JEUX WELLGAMES</h3>
     <p>Spleef, combat à la masse, arbalètes, montée de lave et plus encore. Vote pour ton mode préféré et rejoins la prochaine partie en quelques secondes.</p>
   </article>
-  <article class="card">
+  <article class="card bracketed">
     <div class="card-icon">🤝</div>
     <h3 class="pixel">COMMUNAUTÉ ACTIVE</h3>
     <p>Un serveur pensé pour jouer à plusieurs : grades, équipes, marché et une communauté qui construit le monde avec toi.</p>
@@ -350,11 +451,32 @@
 
 <script>
   // ============================================================
-  // MODIFIE ICI avec l'adresse réelle de ton serveur
   const SERVER_IP = "91.197.6.226:26575";
   // ============================================================
 
   document.getElementById('server-ip').textContent = SERVER_IP;
+
+  // Génère les braises flottantes derrière la bannière (purement décoratif)
+  (function spawnEmbers() {
+    const container = document.getElementById('embers');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+      const ember = document.createElement('div');
+      ember.className = 'ember';
+      const left = Math.random() * 100;
+      const duration = 4 + Math.random() * 4;
+      const delay = Math.random() * 6;
+      const drift = (Math.random() * 60 - 30).toFixed(0) + 'px';
+      ember.style.left = left + '%';
+      ember.style.animationDuration = duration + 's';
+      ember.style.animationDelay = delay + 's';
+      ember.style.setProperty('--drift', drift);
+      container.appendChild(ember);
+    }
+  })();
 
   const copyBtn = document.getElementById('copy-btn');
   copyBtn.addEventListener('click', async () => {
