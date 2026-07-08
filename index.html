@@ -70,6 +70,8 @@
     top: 0;
     z-index: 40;
     display: flex;
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
@@ -98,6 +100,28 @@
     transition: background 0.15s ease, color 0.15s ease;
   }
   .nav-link:hover, .nav-link:focus-visible { background: var(--bg-panel-light); color: var(--gold); }
+
+  /* ---------- Badge de statut (dans la nav, toujours visible) ---------- */
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-panel);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    padding: 0.35rem 0.8rem 0.35rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .nav-status .torch {
+    transform: scale(0.6);
+    margin: -7px -4px -7px -5px;
+  }
+  @media (max-width: 460px) {
+    .nav-status span { display: none; }
+    .nav-status { padding: 0.4rem; }
+  }
 
   /* ---------- Bouton Discord ---------- */
   .discord-btn {
@@ -565,6 +589,15 @@
     <img src="logo.png" alt="Logo WellCraft">
     <span class="pixel">WellCraft</span>
   </div>
+
+  <div class="nav-status" id="nav-status">
+    <div class="torch offline" id="nav-torch">
+      <div class="torch-flame"></div>
+      <div class="torch-stick"></div>
+    </div>
+    <span id="nav-status-text">Vérification…</span>
+  </div>
+
   <div class="nav-right">
     <a class="nav-link" href="#rejoindre">Rejoindre</a>
     <a class="nav-discord" href="https://discord.gg/cv6xxruz5G" target="_blank" rel="noopener" aria-label="Rejoindre le Discord">
@@ -797,7 +830,7 @@
       text: "Le mini-jeu le plus amusant : une couleur est annoncée, fonce dessus le plus vite possible avant que les autres couleurs tombent dans le vide !"
     }
   };
-  
+
   (function setupModeButtons() {
     const buttons = document.querySelectorAll('.mode-pill');
     const panel = document.getElementById('mode-description-panel');
@@ -879,33 +912,73 @@
     }, 1800);
   });
 
-  // Statut en direct via l'API publique mcsrvstat.us (aucune clé requise)
-  async function refreshStatus() {
-    const torch = document.getElementById('torch');
-    const count = document.getElementById('status-count');
-    const label = document.getElementById('status-label');
+  // ============================================================
+  // STATUT EN DIRECT — on interroge d'abord api.mcstatus.io (ping quasi
+  // temps réel, très faible mise en cache), et on se replie sur
+  // api.mcsrvstat.us si la première ne répond pas. Ça évite le cas où
+  // une seule API garde en cache un ancien statut "hors ligne".
+  // ============================================================
+  async function fetchServerStatus() {
     try {
-      const res = await fetch(`https://api.mcsrvstat.us/3/${SERVER_IP}`);
+      const res = await fetch(`https://api.mcstatus.io/v2/status/java/${SERVER_IP}`);
+      if (!res.ok) throw new Error('mcstatus.io indisponible');
       const data = await res.json();
-      if (data.online) {
-        torch.classList.remove('offline');
-        const online = data.players?.online ?? 0;
-        const max = data.players?.max ?? '?';
-        count.textContent = `${online} / ${max}`;
-        label.textContent = 'joueurs en ligne';
-      } else {
-        torch.classList.add('offline');
-        count.textContent = 'Hors ligne';
-        label.textContent = 'Le serveur ne répond pas';
-      }
+      return {
+        online: !!data.online,
+        playersOnline: data.players?.online ?? null,
+        playersMax: data.players?.max ?? null
+      };
     } catch (e) {
-      torch.classList.add('offline');
-      count.textContent = '—';
-      label.textContent = 'Statut indisponible';
+      try {
+        const res2 = await fetch(`https://api.mcsrvstat.us/3/${SERVER_IP}`);
+        const data2 = await res2.json();
+        return {
+          online: !!data2.online,
+          playersOnline: data2.players?.online ?? null,
+          playersMax: data2.players?.max ?? null
+        };
+      } catch (e2) {
+        return null;
+      }
     }
   }
+
+  function applyStatus(status) {
+    const heroTorch = document.getElementById('torch');
+    const navTorch = document.getElementById('nav-torch');
+    const count = document.getElementById('status-count');
+    const label = document.getElementById('status-label');
+    const navText = document.getElementById('nav-status-text');
+
+    if (!status) {
+      [heroTorch, navTorch].forEach(t => t.classList.add('offline'));
+      count.textContent = '—';
+      label.textContent = 'Statut indisponible';
+      navText.textContent = 'Statut indisponible';
+      return;
+    }
+
+    if (status.online) {
+      [heroTorch, navTorch].forEach(t => t.classList.remove('offline'));
+      const online = status.playersOnline ?? '?';
+      const max = status.playersMax ?? '?';
+      count.textContent = `${online} / ${max}`;
+      label.textContent = 'joueurs en ligne';
+      navText.textContent = 'Serveur en ligne !';
+    } else {
+      [heroTorch, navTorch].forEach(t => t.classList.add('offline'));
+      count.textContent = 'Hors ligne';
+      label.textContent = 'Le serveur ne répond pas';
+      navText.textContent = 'Serveur hors-ligne.';
+    }
+  }
+
+  async function refreshStatus() {
+    const status = await fetchServerStatus();
+    applyStatus(status);
+  }
   refreshStatus();
-  setInterval(refreshStatus, 30000);
+  setInterval(refreshStatus, 20000);
 
   // Révélation des cartes au scroll
   const cards = document.querySelectorAll('.card, .grade-card');
