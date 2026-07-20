@@ -566,20 +566,20 @@
     flex-shrink: 0;
   }
 
-  /* ---------- Salons Discord (Annonces / Nouveautés) ---------- */
-  .discord-feed-section {
-    max-width: 900px;
+  /* ---------- Visualisation Discord ---------- */
+  .discord-visual-section {
+    max-width: 780px;
     margin: 0 auto;
     padding: 3.5rem 1.5rem;
     text-align: center;
   }
-  .discord-feed-header {
+  .discord-visual-header {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 1.75rem;
   }
-  .discord-feed-icon {
+  .discord-visual-icon {
     width: 52px; height: 52px;
     border-radius: 10px;
     background: var(--bg-panel);
@@ -589,28 +589,30 @@
     margin-bottom: 0.9rem;
     box-shadow: var(--shadow-hard);
   }
-  .discord-feed-header h2 {
+  .discord-visual-header h2 {
     font-size: 1.3rem;
     color: var(--gold);
     margin: 0 0 0.5rem;
     text-shadow: 0 2px 0 var(--ink);
   }
-  .discord-feed-header p {
+  .discord-visual-header p {
     max-width: 46ch;
     margin: 0;
     color: var(--parchment-dark);
     font-size: 0.92rem;
   }
-  .discord-feed-frame {
+  .discord-visual-frame {
     position: relative;
     background: var(--bg-panel);
     border: 4px solid var(--ink);
     border-radius: 10px;
     overflow: hidden;
     box-shadow: var(--shadow-hard), 0 0 0 3px var(--gold-deep) inset;
-    height: 380px;
+    height: 300px;
+    max-width: 350px;
+    margin: 0 auto;
   }
-  .discord-feed-frame iframe {
+  .discord-visual-frame iframe {
     width: 100%;
     height: 100%;
     border: 0;
@@ -618,7 +620,7 @@
     position: relative;
     z-index: 1;
   }
-  .discord-feed-loading {
+  .discord-visual-loading {
     position: absolute;
     inset: 0;
     display: flex;
@@ -632,109 +634,11 @@
     transition: opacity 0.3s ease;
     z-index: 2;
   }
-  .discord-feed-frame.loaded .discord-feed-loading {
+  .discord-visual-frame.loaded .discord-visual-loading {
     opacity: 0;
     pointer-events: none;
   }
-  .discord-feed-actions { margin-top: 1.25rem; }
-  .history-btn {
-    font-family: 'Rubik', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--ink);
-    background: var(--gold);
-    border: 3px solid var(--ink);
-    border-radius: 8px;
-    padding: 0.7rem 1.3rem;
-    cursor: pointer;
-    box-shadow: var(--shadow-hard);
-    transition: transform 0.08s ease, background 0.15s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .history-btn:hover { background: #ffd766; }
-  .history-btn:active { transform: translateY(4px); box-shadow: none; }
-  .history-btn:focus-visible { outline: 3px solid var(--parchment); outline-offset: 2px; }
-
-  /* ---------- Modale "Historique complet" ---------- */
-  .discord-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(8, 14, 24, 0.82);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-    z-index: 100;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-  }
-  .discord-modal-overlay.open {
-    opacity: 1;
-    visibility: visible;
-  }
-  .discord-modal-panel {
-    position: relative;
-    width: 100%;
-    max-width: 900px;
-    height: 82vh;
-    background: var(--bg-panel);
-    border: 4px solid var(--ink);
-    border-radius: 12px;
-    box-shadow: var(--shadow-hard), 0 0 0 3px var(--gold-deep) inset;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transform: translateY(16px) scale(0.98);
-    transition: transform 0.25s ease;
-  }
-  .discord-modal-overlay.open .discord-modal-panel {
-    transform: translateY(0) scale(1);
-  }
-  .discord-modal-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.9rem 1.2rem;
-    border-bottom: 3px solid var(--ink);
-    background: var(--bg-panel-light);
-  }
-  .discord-modal-head h3 {
-    margin: 0;
-    font-size: 1rem;
-    color: var(--gold);
-  }
-  .discord-modal-close {
-    width: 32px; height: 32px;
-    border-radius: 6px;
-    border: 3px solid var(--ink);
-    background: var(--brick);
-    color: white;
-    font-family: 'Silkscreen', monospace;
-    font-size: 0.9rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: var(--shadow-hard);
-    transition: background 0.15s ease, transform 0.08s ease;
-    flex-shrink: 0;
-  }
-  .discord-modal-close:hover { background: #c95f37; }
-  .discord-modal-close:active { transform: translateY(3px); box-shadow: none; }
-  .discord-modal-close:focus-visible { outline: 3px solid var(--parchment); outline-offset: 2px; }
-  .discord-modal-body { flex: 1; position: relative; }
-  .discord-modal-body iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    display: block;
-  }
-  @media (max-width: 640px) {
-    .discord-feed-frame { height: 320px; }
-    .discord-modal-panel { height: 88vh; }
-  }
+  .discord-visual-actions { margin-top: 1.5rem; }
 
   /* ---------- Footer ---------- */
   footer {
@@ -769,8 +673,6 @@
   </div>
 
   <div class="nav-right">
-    <a class="nav-link" href="#annonces">Annonces</a>
-    <a class="nav-link" href="#nouveautes">Nouveautés</a>
     <a class="nav-link" href="#rejoindre">Rejoindre</a>
     <a class="nav-discord" href="https://discord.gg/cv6xxruz5G" target="_blank" rel="noopener" aria-label="Rejoindre le Discord">
       <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.673-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419z"/></svg>
@@ -845,56 +747,6 @@
   </article>
 </section>
 
-<div class="block-divider"></div>
-
-<section class="discord-feed-section" id="annonces">
-  <div class="discord-feed-header">
-    <div class="discord-feed-icon">📢</div>
-    <h2 class="pixel">Annonces</h2>
-    <p>Les infos officielles du serveur, en direct depuis le salon Discord.</p>
-  </div>
-  <div class="discord-feed-frame bracketed" data-discord-frame data-channel="1473705434526257152">
-    <div class="discord-feed-loading">
-      <div class="torch">
-        <div class="torch-flame"></div>
-        <div class="torch-stick"></div>
-      </div>
-      <span>Chargement du salon…</span>
-    </div>
-  </div>
-  <div class="discord-feed-actions">
-    <button class="history-btn" type="button" data-open-history data-channel="1473705434526257152" data-title="Historique — Annonces">
-      📜 Voir l'historique complet
-    </button>
-  </div>
-</section>
-
-<div class="block-divider"></div>
-
-<section class="discord-feed-section" id="nouveautes">
-  <div class="discord-feed-header">
-    <div class="discord-feed-icon">🛠️</div>
-    <h2 class="pixel">Nouveautés</h2>
-    <p>Patchs, ajouts et changements du serveur, dès qu'ils sortent.</p>
-  </div>
-  <div class="discord-feed-frame bracketed" data-discord-frame data-channel="1522909831713914981">
-    <div class="discord-feed-loading">
-      <div class="torch">
-        <div class="torch-flame"></div>
-        <div class="torch-stick"></div>
-      </div>
-      <span>Chargement du salon…</span>
-    </div>
-  </div>
-  <div class="discord-feed-actions">
-    <button class="history-btn" type="button" data-open-history data-channel="1522909831713914981" data-title="Historique — Nouveautés">
-      📜 Voir l'historique complet
-    </button>
-  </div>
-</section>
-
-<div class="block-divider"></div>
-
 <div class="modes-strip" id="modes-strip">
   <button class="mode-pill" data-mode="spleef" aria-expanded="false"><span class="mode-icon">⛏️</span> WellSpleef</button>
   <button class="mode-pill" data-mode="hunt" aria-expanded="false"><span class="mode-icon">🎃</span> WellHunt</button>
@@ -922,6 +774,31 @@
 
 <div class="block-divider"></div>
   
+<section class="discord-visual-section" id="discord">
+  <div class="discord-visual-header">
+    <div class="discord-visual-icon">💬</div>
+    <h2 class="pixel">La communauté Discord</h2>
+    <p>Annonces, entraide, mini-jeux et discussions : tout se passe sur notre Discord.</p>
+  </div>
+  <div class="discord-visual-frame bracketed" data-discord-widget>
+    <div class="discord-visual-loading">
+      <div class="torch">
+        <div class="torch-flame"></div>
+        <div class="torch-stick"></div>
+      </div>
+      <span>Chargement…</span>
+    </div>
+  </div>
+  <div class="discord-visual-actions">
+    <a class="discord-btn" href="https://discord.gg/cv6xxruz5G" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.673-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419z"/></svg>
+      Rejoindre le serveur
+    </a>
+  </div>
+</section>
+
+<div class="block-divider"></div>
+
 <section class="band">
   <div class="band-banner">
     <img src="banniere_1.png" alt="Bannière secondaire WellCraft">
@@ -937,16 +814,6 @@
   </div>
   <span>Serveur Minecraft communautaire — Java Edition</span>
 </footer>
-
-<div class="discord-modal-overlay" id="discord-modal-overlay">
-  <div class="discord-modal-panel" role="dialog" aria-modal="true" aria-labelledby="discord-modal-title">
-    <div class="discord-modal-head">
-      <h3 class="pixel" id="discord-modal-title">Historique</h3>
-      <button class="discord-modal-close" id="discord-modal-close" type="button" aria-label="Fermer">✕</button>
-    </div>
-    <div class="discord-modal-body" id="discord-modal-body"></div>
-  </div>
-</div>
 
 <script>
   // ============================================================
@@ -1219,87 +1086,24 @@
   setInterval(refreshStatus, 20000);
 
   // ============================================================
-  // SALONS DISCORD — Annonces & Nouveautés, via WidgetBot.
-  // Le bot WidgetBot doit être ajouté au serveur (widgetbot.io/dashboard)
-  // pour que ces aperçus fonctionnent.
+  // WIDGET DISCORD — widget officiel natif de Discord (aucun bot requis).
+  // Doit être activé côté serveur : Paramètres du serveur → Widget →
+  // "Activer le widget du serveur".
   // ============================================================
   const DISCORD_SERVER_ID = "1473703848064323806";
 
-  function widgetbotUrl(channelId) {
-    return `https://e.widgetbot.io/channels/${DISCORD_SERVER_ID}/${channelId}`;
-  }
+  (function setupDiscordWidget() {
+    const frame = document.querySelector('[data-discord-widget]');
+    if (!frame) return;
 
-  // Chargement différé : on ne charge l'iframe d'un salon que lorsque
-  // sa section devient visible à l'écran, pour éviter de charger les
-  // deux salons Discord en même temps au chargement de la page.
-  (function setupDiscordPreviews() {
-    const frames = document.querySelectorAll('[data-discord-frame]');
-    if (!frames.length) return;
-
-    const frameObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const frame = entry.target;
-        if (frame.dataset.loaded) return;
-        const channel = frame.dataset.channel;
-        const iframe = document.createElement('iframe');
-        iframe.src = widgetbotUrl(channel);
-        iframe.title = "Aperçu du salon Discord";
-        iframe.loading = "lazy";
-        iframe.addEventListener('load', () => frame.classList.add('loaded'));
-        frame.appendChild(iframe);
-        frame.dataset.loaded = "true";
-        frameObserver.unobserve(frame);
-      });
-    }, { threshold: 0.15 });
-
-    frames.forEach(frame => frameObserver.observe(frame));
-  })();
-
-  // Modale "Historique complet" : réutilise la même iframe WidgetBot,
-  // en plus grand, pour permettre de remonter dans tout l'historique.
-  (function setupDiscordHistoryModal() {
-    const overlay = document.getElementById('discord-modal-overlay');
-    const body = document.getElementById('discord-modal-body');
-    const titleEl = document.getElementById('discord-modal-title');
-    const closeBtn = document.getElementById('discord-modal-close');
-    const openButtons = document.querySelectorAll('[data-open-history]');
-    if (!overlay || !openButtons.length) return;
-    let lastFocused = null;
-
-    function openModal(channel, title) {
-      lastFocused = document.activeElement;
-      titleEl.textContent = title;
-      body.innerHTML = '';
-      const iframe = document.createElement('iframe');
-      iframe.src = widgetbotUrl(channel);
-      iframe.title = title;
-      body.appendChild(iframe);
-      overlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      closeBtn.focus();
-    }
-
-    function closeModal() {
-      overlay.classList.remove('open');
-      document.body.style.overflow = '';
-      body.innerHTML = '';
-      if (lastFocused) lastFocused.focus();
-    }
-
-    openButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        openModal(btn.dataset.channel, btn.dataset.title || 'Historique');
-      });
-    });
-
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closeModal();
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
-    });
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://discord.com/widget?id=${DISCORD_SERVER_ID}&theme=dark`;
+    iframe.title = "Widget du serveur Discord";
+    iframe.loading = "lazy";
+    iframe.setAttribute('allowtransparency', 'true');
+    iframe.setAttribute('sandbox', 'allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts');
+    iframe.addEventListener('load', () => frame.classList.add('loaded'));
+    frame.appendChild(iframe);
   })();
 
   // Révélation des cartes au scroll
