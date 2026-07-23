@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CapWorks — Helfos</title>
+<link rel="icon" type="image/png" href="CW_Logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- Firebase supprimé : cette page utilise déjà l'API publique du Worker (/api/helfos) -->
+
+<style>
+:root {
+  --bg:#06060e; --bg2:#0b0b18; --surf:#0f0f1e; --surf2:#141428; --surf3:#1a1a32;
+  --bdr:#1e1e38; --bdr2:#2a2a4a;
+  --accent:#6c5ce7; --accentd:#4a3bb5; --accentg:rgba(108,92,231,.18);
+  --cyan:#00cec9; --cyang:rgba(0,206,201,.14);
+  --grn:#00b894; --grng:rgba(0,184,148,.14);
+  --red:#e84393; --redg:rgba(232,67,147,.14);
+  --gold:#fdcb6e; --goldg:rgba(253,203,110,.12);
+  --txt:#e8e8f8; --txt2:#8888aa; --txt3:#3a3a5c;
+  --font:'Space Grotesk',sans-serif; --display:'Syne',sans-serif; --mono:'JetBrains Mono',monospace;
+  --r:8px; --r2:14px; --r3:20px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(108,92,231,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(108,92,231,.025) 1px,transparent 1px);
+  background-size:52px 52px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{to{background-position:200% center}}
+@keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes skelPulse{0%,100%{opacity:.3}50%{opacity:.6}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulseRing{0%,100%{box-shadow:0 0 0 0 rgba(108,92,231,.4)}50%{box-shadow:0 0 0 8px rgba(108,92,231,0)}}
+
+/* ── HEADER ── */
+header{position:sticky;top:0;z-index:100;height:62px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(6,6,14,.92);backdrop-filter:blur(30px);border-bottom:1px solid var(--bdr)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--txt);font-family:var(--display);font-size:1.1rem;font-weight:700;letter-spacing:-.3px}
+.logo-img{width:34px;height:34px;border-radius:9px;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--cyan));box-shadow:0 0 16px var(--accentg);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.logo-img img{width:100%;height:100%;object-fit:cover}
+.logo em{font-style:normal;color:var(--cyan)}
+nav{display:flex;align-items:center;gap:2px}
+nav a{color:var(--txt2);text-decoration:none;font-size:.82rem;font-weight:500;padding:5px 13px;border-radius:8px;transition:all .2s}
+nav a:hover{color:var(--txt);background:var(--surf2)}
+nav a.active{color:var(--accent);background:rgba(108,92,231,.1)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 20px;border-radius:var(--r);font-family:var(--font);font-size:.83rem;font-weight:600;cursor:pointer;transition:all .18s;border:none;text-decoration:none;line-height:1.2;white-space:nowrap}
+.btn:active{transform:scale(.95)!important}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#8b7cf8);color:#fff;box-shadow:0 3px 16px var(--accentg)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px var(--accentg)}
+.btn-ghost{background:transparent;border:1px solid var(--bdr2);color:var(--txt2)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);background:rgba(108,92,231,.06)}
+.btn-sm{padding:5px 13px;font-size:.75rem;border-radius:7px}
+
+/* ── LAYOUT ── */
+.section{position:relative;z-index:1;padding:48px 40px 80px;max-width:1300px;margin:0 auto}
+.sec-head{text-align:center;margin-bottom:40px}
+.sec-tag{display:inline-block;font-size:.6rem;color:var(--accent);letter-spacing:3.5px;text-transform:uppercase;margin-bottom:10px;font-family:var(--font);font-weight:600;background:rgba(108,92,231,.1);border:1px solid rgba(108,92,231,.25);padding:4px 12px;border-radius:99px}
+.sec-head h2{font-family:var(--display);font-size:2.1rem;font-weight:800;letter-spacing:-1.2px;color:var(--txt)}
+.sec-head p{color:var(--txt2);font-size:.88rem;margin-top:8px;max-width:520px;margin-left:auto;margin-right:auto}
+
+/* ── HERO ── */
+.hero{position:relative;z-index:1;text-align:center;padding:64px 40px 24px;overflow:hidden}
+.hero-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:500px;pointer-events:none;background:radial-gradient(ellipse,rgba(108,92,231,.1) 0%,transparent 65%)}
+.hero h1{font-family:var(--display);font-size:clamp(2rem,4.5vw,3.6rem);font-weight:800;line-height:1.1;letter-spacing:-2px;margin-bottom:14px}
+.hero h1 em{font-style:normal;background:linear-gradient(120deg,var(--accent) 0%,var(--cyan) 50%,var(--accent) 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s linear infinite}
+.hero p{color:var(--txt2);font-size:.92rem;max-width:520px;margin:0 auto 8px;line-height:1.8}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:32px;justify-content:center}
+.filter-btn{padding:7px 16px;border-radius:99px;font-size:.76rem;font-weight:600;cursor:pointer;background:var(--surf2);border:1px solid var(--bdr2);color:var(--txt2);transition:all .15s;font-family:var(--font)}
+.filter-btn:hover{border-color:var(--accent);color:var(--txt)}
+.filter-btn.active{background:rgba(108,92,231,.14);border-color:rgba(108,92,231,.45);color:var(--txt)}
+.search-wrap{position:relative;max-width:300px;width:100%}
+.search-wrap input{width:100%;background:var(--surf2);border:1.5px solid var(--bdr2);color:var(--txt);padding:8px 13px 8px 36px;border-radius:99px;font-family:var(--font);font-size:.8rem;outline:none;transition:border-color .2s}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-wrap input::placeholder{color:var(--txt3)}
+.search-wrap .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:.85rem;pointer-events:none}
+
+/* ── HELFO GRID ── */
+.helfo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.helfo-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);padding:0;overflow:hidden;cursor:pointer;transition:all .3s cubic-bezier(.2,.8,.3,1);animation:fadeUp .4s ease both;text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.helfo-card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 16px 48px rgba(108,92,231,.13)}
+.helfo-card-top{padding:22px 22px 0;display:flex;align-items:flex-start;gap:14px}
+.helfo-icon{width:48px;height:48px;border-radius:12px;background:rgba(108,92,231,.12);border:1px solid rgba(108,92,231,.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.helfo-featured .helfo-icon{background:rgba(253,203,110,.1);border-color:rgba(253,203,110,.25)}
+.helfo-meta{flex:1;min-width:0}
+.helfo-cat{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.helfo-featured .helfo-cat{color:var(--gold)}
+.helfo-title{font-size:.98rem;font-weight:800;letter-spacing:-.3px;font-family:var(--display);line-height:1.2}
+.helfo-card-body{padding:12px 22px 20px}
+.helfo-subtitle{font-size:.78rem;color:var(--txt2);line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.helfo-card-footer{padding:14px 22px;border-top:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.helfo-blocks-count{font-size:.68rem;color:var(--txt3);font-family:var(--mono)}
+.helfo-arrow{font-size:.78rem;color:var(--accent);font-weight:600;opacity:0;transition:opacity .2s,transform .2s}
+.helfo-card:hover .helfo-arrow{opacity:1;transform:translateX(4px)}
+.helfo-featured-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(253,203,110,.1);border:1px solid rgba(253,203,110,.25);color:var(--gold);font-size:.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:99px}
+
+/* ── SKELETON ── */
+.skel{border-radius:8px;background:var(--surf2);animation:skelPulse 1.4s ease-in-out infinite}
+.skel-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);padding:22px;overflow:hidden}
+.skel-line{height:10px;margin-bottom:8px;border-radius:6px}
+.skel-icon{width:48px;height:48px;border-radius:12px}
+
+/* ── EMPTY ── */
+.empty-state{text-align:center;padding:80px 20px;color:var(--txt3);font-family:var(--mono);font-size:.78rem;grid-column:1/-1}
+.empty-state .empty-icon{font-size:2.8rem;margin-bottom:12px;opacity:.5}
+
+/* ── READER MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);backdrop-filter:blur(16px);z-index:200;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.overlay.open{display:flex}
+.reader{background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r3);width:100%;max-width:760px;margin:auto;animation:modalIn .3s cubic-bezier(.2,.8,.3,1)}
+.reader-hd{padding:22px 28px 18px;border-bottom:1px solid var(--bdr);display:flex;align-items:flex-start;gap:16px;position:sticky;top:0;background:var(--surf);border-radius:var(--r3) var(--r3) 0 0;z-index:10}
+.reader-hd-icon{width:46px;height:46px;border-radius:11px;background:rgba(108,92,231,.12);border:1px solid rgba(108,92,231,.2);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.reader-hd-info{flex:1;min-width:0}
+.reader-hd-cat{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:3px}
+.reader-hd-title{font-family:var(--display);font-size:1.25rem;font-weight:800;letter-spacing:-.5px;line-height:1.2}
+.reader-hd-sub{font-size:.78rem;color:var(--txt2);margin-top:4px}
+.x-btn{background:transparent;border:1.5px solid var(--bdr2);color:var(--txt2);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.x-btn:hover{border-color:var(--red);color:var(--red)}
+.reader-bd{padding:28px;max-height:calc(100vh - 200px);overflow-y:auto}
+
+/* ── RICH TEXT RENDERER ── */
+.rte{font-size:.9rem;line-height:1.85;color:var(--txt)}
+.rte p{margin-bottom:14px}
+.rte p:last-child{margin-bottom:0}
+.rte strong{color:var(--txt);font-weight:700}
+.rte em{color:var(--txt);font-style:italic}
+.rte u{text-decoration:underline}
+
+/* Highlight colors */
+.hl-red{background:rgba(232,67,147,.2);color:#f57fb5;padding:1px 3px;border-radius:3px}
+.hl-orange{background:rgba(253,150,80,.2);color:#ff9d57;padding:1px 3px;border-radius:3px}
+.hl-yellow{background:rgba(253,203,110,.2);color:var(--gold);padding:1px 3px;border-radius:3px}
+.hl-green{background:rgba(0,184,148,.2);color:var(--grn);padding:1px 3px;border-radius:3px}
+.hl-blue{background:rgba(0,206,201,.2);color:var(--cyan);padding:1px 3px;border-radius:3px}
+.hl-purple{background:rgba(108,92,231,.2);color:#a78bfa;padding:1px 3px;border-radius:3px}
+
+/* Font sizes in RTE */
+.fs-sm{font-size:.78rem}
+.fs-md{font-size:.9rem}
+.fs-lg{font-size:1.05rem}
+.fs-xl{font-size:1.25rem}
+.fs-xxl{font-size:1.5rem}
+
+/* Font families in RTE */
+.ff-mono{font-family:var(--mono)}
+.ff-display{font-family:var(--display)}
+.ff-default{font-family:var(--font)}
+
+.rte a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(108,92,231,.3);transition:border-color .2s}
+.rte a:hover{border-color:var(--accent)}
+.rte-img{max-width:100%;border-radius:var(--r2);border:1px solid var(--bdr);margin:12px 0;display:block}
+.rte-video-wrap{position:relative;width:100%;padding-bottom:56.25%;margin:14px 0;border-radius:var(--r2);overflow:hidden;border:1px solid var(--bdr)}
+.rte-video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.rte-video-thumb{position:relative;width:100%;padding-bottom:56.25%;margin:14px 0;border-radius:var(--r2);overflow:hidden;border:1px solid var(--bdr);cursor:pointer;background:var(--surf2)}
+.rte-video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.rte-video-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);transition:background .2s}
+.rte-video-play:hover{background:rgba(0,0,0,.55)}
+.rte-video-play-btn{width:60px;height:60px;border-radius:50%;background:rgba(108,92,231,.85);display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.rte-copy-block{position:relative;background:var(--surf2);border:1px solid var(--bdr2);border-radius:var(--r2);padding:14px 16px 14px 16px;margin:12px 0;font-family:var(--mono);font-size:.8rem;line-height:1.7;color:var(--cyan);white-space:pre-wrap;word-break:break-all}
+.rte-copy-btn{position:absolute;top:8px;right:8px;background:var(--surf3);border:1px solid var(--bdr2);color:var(--txt2);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .2s;opacity:.6}
+.rte-copy-btn:hover{opacity:1;border-color:var(--accent);color:var(--accent)}
+.rte-copy-btn.copied{border-color:var(--grn);color:var(--grn);opacity:1}
+
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;border-top:1px solid var(--bdr);padding:36px;text-align:center}
+.footer-logo{font-family:var(--display);font-size:.95rem;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
+footer p{font-size:.73rem;color:var(--txt3);line-height:1.85}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+@media(max-width:900px){
+  header{padding:0 16px}
+  nav{display:none}
+  .section{padding:32px 16px 60px}
+  .helfo-grid{grid-template-columns:1fr}
+  .reader-bd{max-height:calc(100vh - 160px)}
+}
+</style>
+
+<script>
+(function(){
+  var req = new XMLHttpRequest();
+  req.open('GET', 'maintenance.js?t=' + Date.now(), false);
+  req.setRequestHeader('Cache-Control','no-cache, no-store, must-revalidate');
+  req.setRequestHeader('Pragma','no-cache');
+  req.setRequestHeader('Expires','0');
+  try { req.send(null); } catch(e){ return; }
+  if(req.status === 200){
+    var text = req.responseText;
+    var m = text.match(/IS_MAINTENANCE\s*=\s*(true|false)/);
+    if(m && m[1] === 'true'){ window.location.replace('index.html'); }
+  }
+})();
+</script>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <a href="home.html" class="logo">
+    <div class="logo-img"><img src="CW_Logo.png" alt="CW" onerror="this.parentElement.textContent='⚡'"></div>
+    CapWorks
+  </a>
+  <nav style="position:absolute;left:50%;transform:translateX(-50%)">
+    <a href="home.html">Accueil</a>
+    <a href="projects.html">Projets</a>
+    <a href="campagnes.html">Campagnes</a>
+    <a href="helfos.html" class="active">Helfos</a>
+    <a href="capworks-studio.html">CapWorks Studio</a>
+    <a href="societes.html">Sous-sociétés</a>
+    <a href="home.html#team">Équipe</a>
+    <a href="home.html#support">Support</a>
+    <a href="home.html#about">À propos</a>
+    <a href="home.html#contact">Contact</a>
+  </nav>
+  <a href="home.html" class="btn btn-ghost btn-sm">← Accueil</a>
+</header>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <h1>Les <em>Helfos</em></h1>
+  <p>Des guides détaillés rédigés par l'équipe pour vous aider à démarrer — tutoriels, astuces, ressources.</p>
+</section>
+
+<!-- ══════════════ CONTENT ══════════════ -->
+<section class="section">
+  <div class="filter-bar" id="filterBar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInp" placeholder="Rechercher un guide..." oninput="filterHelfos()">
+    </div>
+    <button class="filter-btn active" data-cat="" onclick="setCat(this,'')">Tout</button>
+  </div>
+  <div class="helfo-grid" id="helfoGrid">
+    <!-- skeletons -->
+    <div class="skel-card"><div style="display:flex;gap:14px;margin-bottom:14px"><div class="skel skel-icon"></div><div style="flex:1"><div class="skel skel-line" style="width:40%;margin-bottom:6px"></div><div class="skel skel-line" style="width:70%"></div></div></div><div class="skel skel-line" style="width:90%"></div><div class="skel skel-line" style="width:65%"></div></div>
+    <div class="skel-card"><div style="display:flex;gap:14px;margin-bottom:14px"><div class="skel skel-icon"></div><div style="flex:1"><div class="skel skel-line" style="width:35%;margin-bottom:6px"></div><div class="skel skel-line" style="width:80%"></div></div></div><div class="skel skel-line" style="width:85%"></div><div class="skel skel-line" style="width:55%"></div></div>
+    <div class="skel-card"><div style="display:flex;gap:14px;margin-bottom:14px"><div class="skel skel-icon"></div><div style="flex:1"><div class="skel skel-line" style="width:50%;margin-bottom:6px"></div><div class="skel skel-line" style="width:60%"></div></div></div><div class="skel skel-line" style="width:75%"></div><div class="skel skel-line" style="width:90%"></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ READER MODAL ══════════════ -->
+<div class="overlay" id="readerOv" onclick="ovClick(event,'readerOv')">
+  <div class="reader">
+    <div class="reader-hd">
+      <div class="reader-hd-icon" id="rIcon">🧠</div>
+      <div class="reader-hd-info">
+        <div class="reader-hd-cat" id="rCat"></div>
+        <div class="reader-hd-title" id="rTitle"></div>
+        <div class="reader-hd-sub" id="rSub"></div>
+      </div>
+      <button class="x-btn" onclick="closeOv('readerOv')">✕</button>
+    </div>
+    <div class="reader-bd">
+      <div class="rte" id="rteContent"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
+    <img src="https://raw.githubusercontent.com/Capky/CapWorks-Company/main/CW_Logo.png" alt="CW" style="width:28px;height:28px;border-radius:7px" onerror="this.style.display='none'">
+    <div class="footer-logo">CapWorks</div>
+  </div>
+  <p>Développement sur mesure &nbsp;·&nbsp; Tous droits réservés<br><a href="https://discord.gg/RSnKYzXsgm" target="_blank">Discord CapWorks</a> &nbsp;·&nbsp; <a href="home.html">Accueil</a></p>
+</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+function closeOv(id){$(id).classList.remove('open');}
+function ovClick(e,id){if(e.target===$(id))closeOv(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(el=>el.classList.remove('open'));});
+
+let allHelfos=[], activeCat='';
+
+/* ══════════════════════════════════════
+   RICH TEXT PARSER
+   Syntax:
+   **TEXT**  → <strong>
+   *TEXT*    → <em>
+   _TEXT_    → <u>
+   _Red_TEXT_ → highlight rouge  (couleurs: Red Orange Yellow Green Blue Purple)
+   [TEXTE](url) → lien
+   http...(.png|.jpg|.jpeg|.gif|.webp) → image
+   https://youtu.be/... ou youtube.com/watch?v=... → vidéo
+   [size:sm|md|lg|xl|xxl]TEXT[/size]  → taille
+   [font:mono|display|default]TEXT[/font] → police
+══════════════════════════════════════ */
+
+const YT_REGEX = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[?&][^\s]*)*/;
+const IMG_REGEX = /^https?:\/\/.+\.(png|jpe?g|gif|webp|svg|bmp|ico)(\?.*)?$/i;
+const URL_REGEX = /https?:\/\/[^\s)\]]+/g;
+
+function ytThumb(vid){ return `https://img.youtube.com/vi/${vid}/hqdefault.jpg`; }
+
+function parseRTE(raw) {
+  if(!raw) return '';
+  // Split into lines first, process each line
+  const lines = raw.split('\n');
+  let html = '';
+  let i = 0;
+  while(i < lines.length) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    // Skip empty lines (just add spacing)
+    if(!trimmed){ html += '<br>'; i++; continue; }
+
+    // Standalone image URL
+    if(IMG_REGEX.test(trimmed)){
+      html += `<img class="rte-img" src="${escAttr(trimmed)}" alt="image" loading="lazy">`;
+      i++; continue;
+    }
+
+    // Standalone YouTube URL
+    const ytM = trimmed.match(YT_REGEX);
+    if(ytM && trimmed === trimmed.match(/https?:\/\/[^\s]+/)?.[0]){
+      const vid = ytM[1];
+      html += `<div class="rte-video-thumb" onclick="embedYT(this,'${vid}')">
+        <img src="${ytThumb(vid)}" alt="video" loading="lazy">
+        <div class="rte-video-play"><div class="rte-video-play-btn">▶</div></div>
+      </div>`;
+      i++; continue;
+    }
+
+    // [[TEXT]] copy block — multi-line, collect until closing ]]
+    if(trimmed.startsWith('[[')) {
+      // Collect lines until we find one ending with ]]
+      let blockLines = [line.replace(/^\s*\[\[/, '')];
+      let closed = trimmed.endsWith(']]');
+      if(closed) blockLines[0] = blockLines[0].replace(/\]\]\s*$/, '');
+      while(!closed && i+1 < lines.length) {
+        i++;
+        const nl = lines[i];
+        if(nl.trimEnd().endsWith(']]')) {
+          blockLines.push(nl.replace(/\]\]\s*$/, ''));
+          closed = true;
+        } else {
+          blockLines.push(nl);
+        }
+      }
+      const blockText = blockLines.join('\n');
+      const escaped = blockText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const uid = 'cb_'+Math.random().toString(36).slice(2,8);
+      html += `<div class="rte-copy-block" id="${uid}">${escaped}<button class="rte-copy-btn" title="Copier" onclick="copyBlock('${uid}',this)">📋</button></div>`;
+      i++; continue;
+    }
+
+    // Normal paragraph — process inline markup
+    html += '<p>' + parseInline(line) + '</p>';
+    i++;
+  }
+  return html;
+}
+
+function parseInline(text) {
+  // [font:TYPE]...[/font] — mono escapes HTML, others parse inline
+  text = text.replace(/\[font:(mono|display|default)\]([\s\S]*?)\[\/font\]/g, (_, type, content) => {
+    if(type === 'mono') {
+      const escaped = content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return `<span class="ff-mono">${escaped}</span>`;
+    }
+    return `<span class="ff-${type}">${parseInlineInner(content)}</span>`;
+  });
+
+  // [size:SM|MD|LG|XL|XXL]...[/size]
+  text = text.replace(/\[size:(sm|md|lg|xl|xxl)\]([\s\S]*?)\[\/size\]/gi, (_, sz, content) =>
+    `<span class="fs-${sz.toLowerCase()}">${parseInlineInner(content)}</span>`);
+
+  return parseInlineInner(text);
+}
+
+function parseInlineInner(text) {
+  // Highlight: _Red_TEXT_ (color name then text)
+  text = text.replace(/_([A-Za-z]+)_(.*?)_/g, (full, color, content) => {
+    const c = color.toLowerCase();
+    const valid = ['red','orange','yellow','green','blue','purple'];
+    if(!valid.includes(c)) return full;
+    return `<span class="hl-${c}">${parseBasicInline(content)}</span>`;
+  });
+  return parseBasicInline(text);
+}
+
+function parseBasicInline(text) {
+  // **bold**
+  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  // *italic*
+  text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  // _underline_ (only if not a highlight pattern)
+  text = text.replace(/(?<!hl-)_((?!Red_|Orange_|Yellow_|Green_|Blue_|Purple_)[^_]+)_/g, '<u>$1</u>');
+  // [TEXTE](url) link
+  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, url) =>
+    `<a href="${escAttr(url)}" target="_blank" rel="noopener">${label}</a>`);
+  // Inline image URL
+  text = text.replace(/(https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp|svg)(?:\?[^\s]*)?)/gi, (url) =>
+    `<img class="rte-img" src="${escAttr(url)}" alt="image" loading="lazy" style="max-height:300px">`);
+  // Inline YouTube URL
+  text = text.replace(/(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[?&][^\s]*)*)/g, (url, _, vid) =>
+    `<div class="rte-video-thumb" onclick="embedYT(this,'${vid}')"><img src="${ytThumb(vid)}" alt="video" loading="lazy"><div class="rte-video-play"><div class="rte-video-play-btn">▶</div></div></div>`);
+  return text;
+}
+
+function escAttr(s){ return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+function copyBlock(id, btn) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  // Get text content without the button text
+  const clone = el.cloneNode(true);
+  clone.querySelector('.rte-copy-btn')?.remove();
+  const text = clone.innerText || clone.textContent;
+  navigator.clipboard.writeText(text.trim()).then(() => {
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋'; btn.classList.remove('copied'); }, 1800);
+  }).catch(() => {
+    btn.textContent = '✗';
+    setTimeout(() => { btn.textContent = '📋'; }, 1500);
+  });
+}
+
+function embedYT(el, vid){
+  el.outerHTML = `<div class="rte-video-wrap"><iframe src="https://www.youtube.com/embed/${vid}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
+}
+
+/* ══════════════════════════════════════
+   CHARGEMENT DES HELFOS (via l'API publique du Worker)
+══════════════════════════════════════ */
+const API='https://capworks-worker.capkychannel.workers.dev';
+
+async function loadHelfos(){
+  try{
+    const res=await fetch(API+'/api/helfos');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const list=await res.json();
+    // Le Worker filtre déjà les éléments masqués et trie par ordre.
+    allHelfos=Array.isArray(list)?list:[];
+    buildCatFilters();
+    renderGrid();
+  }catch(e){
+    $('helfoGrid').innerHTML='<div class="empty-state"><div class="empty-icon">⚠️</div><p>Impossible de charger les Helfos.</p></div>';
+  }
+}
+
+function buildCatFilters(){
+  const cats = [...new Set(allHelfos.map(h=>h.category||'Général'))].sort();
+  const bar = $('filterBar');
+  cats.forEach(cat=>{
+    const btn = document.createElement('button');
+    btn.className='filter-btn'; btn.dataset.cat=cat;
+    btn.textContent=cat;
+    btn.onclick=()=>setCat(btn,cat);
+    bar.appendChild(btn);
+  });
+}
+
+function setCat(btn, cat){
+  activeCat=cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));
+  filterHelfos();
+}
+
+function filterHelfos(){
+  const q=($('searchInp').value||'').toLowerCase().trim();
+  let list = allHelfos;
+  if(activeCat) list=list.filter(h=>(h.category||'Général')===activeCat);
+  if(q) list=list.filter(h=>(h.title||'').toLowerCase().includes(q)||(h.subtitle||'').toLowerCase().includes(q));
+  renderGrid(list);
+}
+
+function renderGrid(list){
+  if(list===undefined) list=allHelfos;
+  const grid=$('helfoGrid');
+  if(!list.length){
+    grid.innerHTML='<div class="empty-state"><div class="empty-icon">🧠</div><p>Aucun Helfo trouvé.<br>Revenez bientôt !</p></div>';
+    return;
+  }
+  grid.innerHTML = list.map((h,i)=>`
+    <div class="helfo-card${h.featured?' helfo-featured':''}" style="animation-delay:${i*0.06}s" onclick="openHelfo('${h.id}')">
+      <div class="helfo-card-top">
+        <div class="helfo-icon">${h.icon||'🧠'}</div>
+        <div class="helfo-meta">
+          <div class="helfo-cat">${escHtml(h.category||'Général')}${h.featured?` <span class="helfo-featured-badge">⭐ Vedette</span>`:''}</div>
+          <div class="helfo-title">${escHtml(h.title||'Sans titre')}</div>
+        </div>
+      </div>
+      <div class="helfo-card-body">
+        <div class="helfo-subtitle">${escHtml(h.subtitle||'')}</div>
+      </div>
+      <div class="helfo-card-footer">
+        <span class="helfo-blocks-count">${(h.content||'').length>0?'Guide complet':'—'}</span>
+        <span class="helfo-arrow">Lire →</span>
+      </div>
+    </div>`).join('');
+}
+
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function openHelfo(id){
+  const h = allHelfos.find(x=>x.id===id);
+  if(!h) return;
+  $('rIcon').textContent = h.icon||'🧠';
+  $('rCat').textContent = h.category||'Général';
+  $('rTitle').textContent = h.title||'';
+  $('rSub').textContent = h.subtitle||'';
+  $('rteContent').innerHTML = parseRTE(h.content||'');
+  $('readerOv').classList.add('open');
+  $('readerOv').querySelector('.reader-bd').scrollTop=0;
+}
+
+document.addEventListener('DOMContentLoaded', loadHelfos);
+</script>
+</body>
+</html>

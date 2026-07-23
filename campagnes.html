@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CapWorks — Campagnes</title>
+<link rel="icon" type="image/png" href="CW_Logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#06060e; --bg2:#0b0b18; --surf:#0f0f1e; --surf2:#141428; --surf3:#1a1a32;
+  --bdr:#1e1e38; --bdr2:#2a2a4a;
+  --accent:#6c5ce7; --accentd:#4a3bb5; --accentg:rgba(108,92,231,.18);
+  --cyan:#00cec9; --cyang:rgba(0,206,201,.14);
+  --grn:#00b894; --grng:rgba(0,184,148,.14);
+  --red:#e84393; --redg:rgba(232,67,147,.14);
+  --gold:#fdcb6e; --goldg:rgba(253,203,110,.12);
+  --txt:#e8e8f8; --txt2:#8888aa; --txt3:#3a3a5c;
+  --font:'Space Grotesk',sans-serif; --display:'Syne',sans-serif; --mono:'JetBrains Mono',monospace;
+  --r:8px; --r2:14px; --r3:20px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(108,92,231,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(108,92,231,.025) 1px,transparent 1px);
+  background-size:52px 52px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{to{background-position:200% center}}
+@keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes skelPulse{0%,100%{opacity:.3}50%{opacity:.6}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(253,203,110,.4)}50%{box-shadow:0 0 0 8px rgba(253,203,110,0)}}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;height:62px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(6,6,14,.92);backdrop-filter:blur(30px);border-bottom:1px solid var(--bdr)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--txt);font-family:var(--display);font-size:1.1rem;font-weight:700;letter-spacing:-.3px}
+.logo-img{width:34px;height:34px;border-radius:9px;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--cyan));box-shadow:0 0 16px var(--accentg);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.logo-img img{width:100%;height:100%;object-fit:cover}
+.logo em{font-style:normal;color:var(--cyan)}
+nav{display:flex;align-items:center;gap:2px}
+nav a{color:var(--txt2);text-decoration:none;font-size:.82rem;font-weight:500;padding:5px 13px;border-radius:8px;transition:all .2s}
+nav a:hover{color:var(--txt);background:var(--surf2)}
+nav a.active{color:var(--accent);background:rgba(108,92,231,.1)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 20px;border-radius:var(--r);font-family:var(--font);font-size:.83rem;font-weight:600;cursor:pointer;transition:all .18s;border:none;text-decoration:none;line-height:1.2;white-space:nowrap}
+.btn:active{transform:scale(.95)!important}
+.btn:disabled{opacity:.45;cursor:not-allowed!important;transform:none!important}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#8b7cf8);color:#fff;box-shadow:0 3px 16px var(--accentg)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px var(--accentg)}
+.btn-gold{background:linear-gradient(135deg,#e0a800,var(--gold));color:#111;font-weight:700;box-shadow:0 3px 16px var(--goldg)}
+.btn-gold:hover{transform:translateY(-2px)}
+.btn-ghost{background:transparent;border:1px solid var(--bdr2);color:var(--txt2)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);background:rgba(108,92,231,.06)}
+.btn-sm{padding:5px 13px;font-size:.75rem;border-radius:7px}
+.btn-full{width:100%}
+
+/* INPUTS */
+.inp{width:100%;background:var(--surf2);border:1.5px solid var(--bdr2);color:var(--txt);padding:9px 13px;border-radius:var(--r);font-family:var(--font);font-size:.83rem;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--accent)}
+.inp::placeholder{color:var(--txt3)}
+textarea.inp{resize:vertical;min-height:70px}
+.fg{margin-bottom:13px}
+.fg label{display:block;font-size:.65rem;font-weight:700;color:var(--txt2);letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px}
+
+/* LAYOUT */
+.section{position:relative;z-index:1;padding:48px 40px 80px;max-width:1300px;margin:0 auto}
+.sec-head{text-align:center;margin-bottom:36px}
+.sec-tag{display:inline-block;font-size:.6rem;color:var(--accent);letter-spacing:3.5px;text-transform:uppercase;margin-bottom:10px;font-family:var(--font);font-weight:600;background:rgba(108,92,231,.1);border:1px solid rgba(108,92,231,.25);padding:4px 12px;border-radius:99px}
+.sec-head h2{font-family:var(--display);font-size:2.1rem;font-weight:800;letter-spacing:-1.2px;color:var(--txt)}
+.sec-head p{color:var(--txt2);font-size:.88rem;margin-top:8px;max-width:520px;margin-left:auto;margin-right:auto}
+
+/* HERO */
+.hero{position:relative;z-index:1;text-align:center;padding:64px 40px 24px;overflow:hidden}
+.hero-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:500px;pointer-events:none;background:radial-gradient(ellipse,rgba(253,203,110,.07) 0%,transparent 65%)}
+.hero h1{font-family:var(--display);font-size:clamp(2rem,4.5vw,3.6rem);font-weight:800;line-height:1.1;letter-spacing:-2px;margin-bottom:14px}
+.hero h1 em{font-style:normal;background:linear-gradient(120deg,var(--gold) 0%,var(--accent) 50%,var(--gold) 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s linear infinite}
+.hero p{color:var(--txt2);font-size:.92rem;max-width:520px;margin:0 auto 8px;line-height:1.8}
+
+/* FEATURED CAMPAIGN */
+.featured-camp{position:relative;background:linear-gradient(135deg,rgba(253,203,110,.08),rgba(108,92,231,.08));border:1px solid rgba(253,203,110,.3);border-radius:var(--r3);overflow:hidden;margin-bottom:40px;display:grid;grid-template-columns:1fr 1fr;animation:fadeUp .5s ease both}
+.featured-camp .fc-media{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--surf2)}
+.featured-camp .fc-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.featured-camp .fc-media .fc-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:4rem}
+.fc-badge{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:6px;background:rgba(253,203,110,.18);border:1px solid rgba(253,203,110,.4);color:var(--gold);font-size:.66rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;border-radius:99px;backdrop-filter:blur(6px)}
+.fc-badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulseGlow 1.8s infinite}
+.fc-body{padding:32px;display:flex;flex-direction:column;justify-content:center}
+.fc-title{font-family:var(--display);font-size:1.7rem;font-weight:800;letter-spacing:-.8px;margin-bottom:10px}
+.fc-desc{color:var(--txt2);font-size:.86rem;line-height:1.8;margin-bottom:20px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:18px}
+.progress-stats{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.progress-raised{font-family:var(--display);font-size:1.3rem;font-weight:800;color:var(--gold)}
+.progress-raised small{font-size:.7rem;color:var(--txt3);font-weight:500;font-family:var(--font)}
+.progress-goal{font-size:.74rem;color:var(--txt3);font-family:var(--mono)}
+.progress-bar{height:9px;background:var(--surf3);border-radius:99px;overflow:hidden;border:1px solid var(--bdr2)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:99px;transition:width .6s cubic-bezier(.2,.8,.3,1);position:relative}
+.progress-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);background-size:200% 100%;animation:shimmer 2s linear infinite}
+.progress-pct{text-align:right;font-size:.66rem;color:var(--txt3);margin-top:5px;font-family:var(--mono)}
+
+/* CAMPAIGN GRID */
+.camp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.camp-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden;transition:all .3s cubic-bezier(.2,.8,.3,1);animation:fadeUp .45s ease both;display:flex;flex-direction:column}
+.camp-card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 16px 48px rgba(108,92,231,.13)}
+.camp-media{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--surf2)}
+.camp-media img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.camp-media .cm-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.4rem}
+.camp-inactive-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:var(--txt2);font-size:.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:99px;border:1px solid var(--bdr2)}
+.camp-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
+.camp-title{font-size:1rem;font-weight:700;letter-spacing:-.3px;margin-bottom:6px}
+.camp-desc{font-size:.79rem;color:var(--txt2);line-height:1.65;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+
+/* EMPTY / SKELETON */
+.empty-state{text-align:center;padding:60px 20px;color:var(--txt3);font-family:var(--mono);font-size:.78rem;grid-column:1/-1}
+.empty-state .empty-icon{font-size:2.2rem;margin-bottom:10px;opacity:.6}
+.skel{border-radius:8px;background:var(--surf2);animation:skelPulse 1.4s ease-in-out infinite}
+.skel-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden}
+.skel-card .skel-media{aspect-ratio:16/9}
+.skel-card .skel-body{padding:18px 20px}
+.skel-line{height:10px;margin-bottom:8px;border-radius:6px}
+
+/* DONATE MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);z-index:200;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--surf);border:1px solid var(--bdr2);border-radius:var(--r3);width:100%;max-width:460px;margin:auto;animation:modalIn .3s cubic-bezier(.2,.8,.3,1)}
+.modal-hd{padding:21px 25px 18px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.modal-hd h3{font-size:1.04rem;font-weight:800;letter-spacing:-.4px;font-family:var(--display)}
+.modal-bd{padding:21px 25px}
+.x-btn{background:transparent;border:1.5px solid var(--bdr2);color:var(--txt2);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.x-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* AMOUNT SLIDER */
+.amount-display{text-align:center;margin-bottom:18px}
+.amount-display .val{font-family:var(--display);font-size:2.6rem;font-weight:800;color:var(--gold);letter-spacing:-1px}
+.amount-display .val small{font-size:1.2rem;font-weight:600;color:var(--txt3);margin-left:4px}
+.amount-slider{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:99px;background:var(--surf3);border:1px solid var(--bdr2);outline:none;margin:14px 0 18px;cursor:pointer}
+.amount-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--gold);border:3px solid var(--surf);box-shadow:0 0 0 1px var(--bdr2),0 2px 8px rgba(0,0,0,.4);cursor:pointer}
+.amount-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--gold);border:3px solid var(--surf);cursor:pointer}
+.amount-presets{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.amount-preset{flex:1;min-width:60px;padding:8px;border-radius:8px;background:var(--surf2);border:1.5px solid var(--bdr2);color:var(--txt2);font-size:.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all .15s;font-family:var(--font)}
+.amount-preset:hover{border-color:var(--accent);color:var(--txt)}
+.amount-preset.active{background:rgba(253,203,110,.12);border-color:var(--gold);color:var(--gold)}
+.donate-methods{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.donate-method{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:9px;background:var(--surf2);border:1.5px solid var(--bdr2);color:var(--txt);text-decoration:none;font-size:.84rem;font-weight:700;transition:all .2s}
+.donate-method:hover{border-color:var(--accent);transform:translateY(-2px)}
+.donate-method .dm-icon{font-size:1.2rem}
+.donate-method .dm-sub{font-size:.66rem;color:var(--txt3);font-weight:500;margin-top:1px}
+.donate-note{font-size:.7rem;color:var(--txt3);text-align:center;margin-top:14px;line-height:1.6}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--bdr);padding:36px;text-align:center}
+.footer-logo{font-family:var(--display);font-size:.95rem;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
+.footer-logo em{font-style:normal;color:var(--cyan)}
+footer p{font-size:.73rem;color:var(--txt3);line-height:1.85}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+@media(max-width:900px){
+  header{padding:0 16px}
+  nav{display:none}
+  .section{padding:32px 16px 60px}
+  .featured-camp{grid-template-columns:1fr}
+  .camp-grid{grid-template-columns:1fr}
+}
+</style>
+
+<script>
+(function(){
+  var req = new XMLHttpRequest();
+  req.open('GET', 'maintenance.js?t=' + Date.now(), false); // synchronous + cache-bust
+  req.setRequestHeader('Cache-Control','no-cache, no-store, must-revalidate');
+  req.setRequestHeader('Pragma','no-cache');
+  req.setRequestHeader('Expires','0');
+  try { req.send(null); } catch(e){ return; }
+  if(req.status === 200){
+    var text = req.responseText;
+    var m = text.match(/IS_MAINTENANCE\s*=\s*(true|false)/);
+    if(m && m[1] === 'true'){
+      window.location.replace('index.html');
+    }
+  }
+})();
+</script>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <a href="home.html" class="logo">
+    <div class="logo-img"><img src="CW_Logo.png" alt="CW" onerror="this.parentElement.textContent='⚡'"></div>
+    CapWorks
+  </a>
+  <nav style="position:absolute;left:50%;transform:translateX(-50%)">
+    <a href="home.html">Accueil</a>
+    <a href="projects.html">Projets</a>
+    <a href="campagnes.html" class="active">Campagnes</a>
+    <a href="helfos.html">Helfos</a>
+    <a href="capworks-studio.html">CapWorks Studio</a>
+    <a href="societes.html">Sous-sociétés</a>
+    <a href="home.html#team">Équipe</a>
+    <a href="home.html#support">Support</a>
+    <a href="home.html#about">À propos</a>
+    <a href="home.html#contact">Contact</a>
+  </nav>
+  <a href="home.html" class="btn btn-ghost btn-sm">← Accueil</a>
+</header>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <h1>Nos <em>campagnes</em> de don</h1>
+  <p>Soutenez le développement de nos projets en cours — chaque contribution nous aide à concrétiser de nouvelles idées.</p>
+</section>
+
+<!-- ══════════════ CONTENT ══════════════ -->
+<section class="section">
+  <div id="featuredWrap"></div>
+  <div class="sec-head" id="otherCampsHead" style="display:none">
+    <span class="sec-tag">// autres campagnes</span>
+    <h2>Toutes les campagnes</h2>
+  </div>
+  <div class="camp-grid" id="campGrid">
+    <div class="skel-card"><div class="skel skel-media"></div><div class="skel-body"><div class="skel skel-line" style="width:55%"></div><div class="skel skel-line" style="width:85%"></div><div class="skel skel-line" style="width:65%"></div></div></div>
+    <div class="skel-card"><div class="skel skel-media"></div><div class="skel-body"><div class="skel skel-line" style="width:45%"></div><div class="skel skel-line" style="width:75%"></div><div class="skel skel-line" style="width:60%"></div></div></div>
+    <div class="skel-card"><div class="skel skel-media"></div><div class="skel-body"><div class="skel skel-line" style="width:55%"></div><div class="skel skel-line" style="width:80%"></div><div class="skel skel-line" style="width:50%"></div></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ DONATE MODAL ══════════════ -->
+<div class="overlay" id="donateOv" onclick="ovClick(event,'donateOv')">
+  <div class="modal">
+    <div class="modal-hd"><h3 id="donateTitle">💛 Faire un don</h3><button class="x-btn" onclick="closeOv('donateOv')">✕</button></div>
+    <div class="modal-bd">
+      <div class="amount-display"><span class="val" id="amountVal">10</span><small>€</small></div>
+      <input type="range" class="amount-slider" id="amountSlider" min="1" max="200" value="10" oninput="onSlider(this.value)">
+      <div class="amount-presets" id="amountPresets"></div>
+      <div class="donate-methods" id="donateMethods"></div>
+      <div class="donate-note">Les dons sont traités via des plateformes externes sécurisées (PayPal / Stripe). CapWorks n'enregistre aucune information bancaire.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
+    <img src="https://raw.githubusercontent.com/Capky/CapWorks-Company/main/CW_Logo.png" alt="CW" style="width:28px;height:28px;border-radius:7px" onerror="this.style.display='none'">
+    <div class="footer-logo">CapWorks</div>
+  </div>
+  <p>Développement sur mesure &nbsp;·&nbsp; Tous droits réservés<br><a href="https://discord.gg/RSnKYzXsgm" target="_blank">Discord CapWorks</a> &nbsp;·&nbsp; <a href="home.html">Accueil</a></p>
+</footer>
+
+<script>
+const API='https://capworks-worker.capkychannel.workers.dev';
+const $=id=>document.getElementById(id);
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function closeOv(id){$(id).classList.remove('open');}
+function ovClick(e,id){if(e.target===$(id))closeOv(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(el=>el.classList.remove('open'));});
+function toast(msg,type='success'){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--surf2);border:1px solid var(--bdr2);border-radius:8px;padding:11px 15px;font-size:.78rem;z-index:9999;max-width:280px;color:var(--txt);';t.style.borderColor=type==='success'?'rgba(0,184,148,.45)':'rgba(232,67,147,.45)';t.textContent=(type==='success'?'✓ ':'✕ ')+msg;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='all .3s';setTimeout(()=>t.remove(),300);},3200);}
+
+let campaigns=[];
+
+async function apiGet(path){try{const r=await fetch(API+path);if(!r.ok)return{error:`HTTP ${r.status}`};return r.json();}catch(e){return{error:'Réseau'};}}
+
+async function init(){
+  const data=await apiGet('/api/campaigns');
+  if(data?.error || !Array.isArray(data)){ renderEmpty(); return; }
+  campaigns=data;
+  render();
+}
+
+function fmtMoney(n){ return Number(n||0).toLocaleString('fr-FR'); }
+
+function renderEmpty(){
+  $('campGrid').innerHTML=`<div class="empty-state"><div class="empty-icon">💛</div><p>Aucune campagne de don pour le moment.<br>Revenez bientôt !</p></div>`;
+}
+
+function render(){
+  if(!campaigns.length){ renderEmpty(); return; }
+
+  // Featured campaign (first one with featured=true, or none)
+  const featured=campaigns.find(c=>c.featured && c.active!==false);
+  const others=campaigns.filter(c=>c!==featured);
+
+  $('featuredWrap').innerHTML=featured?featuredHtml(featured):'';
+
+  if(!others.length){
+    $('campGrid').innerHTML = featured ? '' : `<div class="empty-state"><div class="empty-icon">💛</div><p>Aucune autre campagne pour le moment.</p></div>`;
+    $('otherCampsHead').style.display = (featured && !others.length) ? 'none' : (others.length?'block':'none');
+    return;
+  }
+
+  $('otherCampsHead').style.display = featured ? 'block' : 'none';
+  $('campGrid').innerHTML = others.map((c,i)=>cardHtml(c,i)).join('');
+}
+
+function progressHtml(c){
+  const goal=c.goal||0, raised=c.raised||0;
+  const pct=goal>0?Math.min(100,Math.round((raised/goal)*100)):0;
+  return `<div class="progress-wrap">
+    <div class="progress-stats">
+      <div class="progress-raised">${fmtMoney(raised)}€ <small>récoltés</small></div>
+      <div class="progress-goal">objectif : ${fmtMoney(goal)}€</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="progress-pct">${pct}% atteint</div>
+  </div>`;
+}
+
+function featuredHtml(c){
+  const media=c.imageUrl?`<img src="${esc(c.imageUrl)}" alt="${esc(c.title||'')}" loading="lazy">`:`<div class="fc-icon">💛</div>`;
+  return `<div class="featured-camp">
+    <div class="fc-media">${media}<div class="fc-badge"><span class="pulse"></span> En vedette</div></div>
+    <div class="fc-body">
+      <div class="fc-title">${esc(c.title||'Sans titre')}</div>
+      <div class="fc-desc">${esc(c.desc||'')}</div>
+      ${progressHtml(c)}
+      <button class="btn btn-gold" onclick='openDonate(${JSON.stringify(c.id)})'>💛 Soutenir ce projet</button>
+    </div>
+  </div>`;
+}
+
+function cardHtml(c,i){
+  const media=c.imageUrl?`<img src="${esc(c.imageUrl)}" alt="${esc(c.title||'')}" loading="lazy">`:`<div class="cm-icon">💛</div>`;
+  const inactive=c.active===false;
+  return `<div class="camp-card" style="animation-delay:${i*.05}s">
+    <div class="camp-media">${media}${inactive?'<div class="camp-inactive-badge">Terminée</div>':''}</div>
+    <div class="camp-body">
+      <div class="camp-title">${esc(c.title||'Sans titre')}</div>
+      <div class="camp-desc">${esc(c.desc||'')}</div>
+      ${progressHtml(c)}
+      <button class="btn ${inactive?'btn-ghost':'btn-primary'} btn-full" ${inactive?'disabled':''} onclick='openDonate(${JSON.stringify(c.id)})'>${inactive?'Campagne terminée':'💛 Faire un don'}</button>
+    </div>
+  </div>`;
+}
+
+/* ══ DONATE MODAL ══ */
+const PRESETS=[5,10,25,50];
+let currentCamp=null;
+
+function openDonate(id){
+  currentCamp=campaigns.find(c=>c.id===id);
+  if(!currentCamp)return;
+  $('donateTitle').textContent=`💛 ${currentCamp.title||'Soutenir le projet'}`;
+  $('amountSlider').value=10; $('amountVal').textContent='10';
+  $('amountPresets').innerHTML=PRESETS.map(p=>`<div class="amount-preset${p===10?' active':''}" onclick="setAmount(${p})">${p}€</div>`).join('');
+  renderDonateMethods(10);
+  $('donateOv').classList.add('open');
+}
+function onSlider(v){ $('amountVal').textContent=v; document.querySelectorAll('.amount-preset').forEach(el=>el.classList.toggle('active',el.textContent.trim()===v+'€')); renderDonateMethods(v); }
+function setAmount(v){ $('amountSlider').value=v; $('amountVal').textContent=v; document.querySelectorAll('.amount-preset').forEach(el=>el.classList.toggle('active',el.textContent.trim()===v+'€')); renderDonateMethods(v); }
+
+function renderDonateMethods(amount){
+  if(!currentCamp){ $('donateMethods').innerHTML=''; return; }
+  let html='';
+  if(currentCamp.paypalUrl){
+    const url=currentCamp.paypalUrl + (currentCamp.paypalUrl.includes('?')?'&':'?') + 'amount=' + encodeURIComponent(amount);
+    html+=`<a class="donate-method" href="${esc(url)}" target="_blank" onclick="trackContribute(${amount})"><span class="dm-icon">🅿️</span><div><div>Payer avec PayPal</div><div class="dm-sub">${amount}€ · paiement sécurisé</div></div></a>`;
+  }
+  if(currentCamp.stripeUrl){
+    const url=currentCamp.stripeUrl;
+    html+=`<a class="donate-method" href="${esc(url)}" target="_blank" onclick="trackContribute(${amount})"><span class="dm-icon">💳</span><div><div>Payer par carte (Stripe)</div><div class="dm-sub">${amount}€ · paiement sécurisé</div></div></a>`;
+  }
+  if(!html){
+    html=`<div style="text-align:center;color:var(--txt3);font-size:.78rem;padding:14px">Aucun moyen de paiement n'est encore configuré pour cette campagne.<br>Contactez-nous via <a href="home.html#contact" style="color:var(--accent)">le formulaire de contact</a>.</div>`;
+  }
+  $('donateMethods').innerHTML=html;
+}
+function trackContribute(amount){
+  if(!currentCamp)return;
+  // Best-effort: increments the "raised" counter; ignored if not authenticated.
+  fetch(API+'/api/contribute',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cat:'campaign',id:currentCamp.id,amount:Number(amount)})}).catch(()=>{});
+}
+
+init();
+</script>
+</body>
+</html>

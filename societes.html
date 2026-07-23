@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CapWorks — Sous-sociétés</title>
+<link rel="icon" type="image/png" href="CW_Logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#06060e; --bg2:#0b0b18; --surf:#0f0f1e; --surf2:#141428; --surf3:#1a1a32;
+  --bdr:#1e1e38; --bdr2:#2a2a4a;
+  --accent:#6c5ce7; --accentd:#4a3bb5; --accentg:rgba(108,92,231,.18);
+  --cyan:#00cec9; --cyang:rgba(0,206,201,.14);
+  --grn:#00b894; --grng:rgba(0,184,148,.14);
+  --red:#e84393; --redg:rgba(232,67,147,.14);
+  --gold:#fdcb6e; --goldg:rgba(253,203,110,.12);
+  --txt:#e8e8f8; --txt2:#8888aa; --txt3:#3a3a5c;
+  --font:'Space Grotesk',sans-serif; --display:'Syne',sans-serif; --mono:'JetBrains Mono',monospace;
+  --r:8px; --r2:14px; --r3:20px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(108,92,231,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(108,92,231,.025) 1px,transparent 1px);
+  background-size:52px 52px}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{to{background-position:200% center}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes pulseLine{0%,100%{opacity:.35}50%{opacity:.9}}
+header{position:sticky;top:0;z-index:100;height:62px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,6,14,.92);backdrop-filter:blur(30px);border-bottom:1px solid var(--bdr)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--txt);font-family:var(--display);font-size:1.1rem;font-weight:700;letter-spacing:-.3px}
+.logo-img{width:34px;height:34px;border-radius:9px;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--cyan));box-shadow:0 0 16px var(--accentg);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.logo-img img{width:100%;height:100%;object-fit:cover}
+.logo em{font-style:normal;color:var(--cyan)}
+nav{display:flex;align-items:center;gap:2px}
+nav a{color:var(--txt2);text-decoration:none;font-size:.82rem;font-weight:500;padding:5px 13px;border-radius:8px;transition:all .2s}
+nav a:hover{color:var(--txt);background:var(--surf2)}
+nav a.active{color:var(--accent);background:rgba(108,92,231,.1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 20px;border-radius:var(--r);font-family:var(--font);font-size:.83rem;font-weight:600;cursor:pointer;transition:all .18s;border:none;text-decoration:none;line-height:1.2;white-space:nowrap}
+.btn:active{transform:scale(.95)!important}
+.btn-ghost{background:transparent;border:1px solid var(--bdr2);color:var(--txt2)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);background:rgba(108,92,231,.06)}
+.btn-sm{padding:5px 13px;font-size:.75rem;border-radius:7px}
+.section{position:relative;z-index:1;padding:72px 40px;max-width:1300px;margin:0 auto}
+.sec-head{text-align:center;margin-bottom:36px}
+.sec-tag{display:inline-block;font-size:.6rem;color:var(--accent);letter-spacing:3.5px;text-transform:uppercase;margin-bottom:10px;font-family:var(--font);font-weight:600;background:rgba(108,92,231,.1);border:1px solid rgba(108,92,231,.25);padding:4px 12px;border-radius:99px}
+.sec-head h2{font-family:var(--display);font-size:2.1rem;font-weight:800;letter-spacing:-1.2px;color:var(--txt)}
+.sec-head p{color:var(--txt2);font-size:.88rem;margin-top:8px;max-width:560px;margin-left:auto;margin-right:auto}
+.sec-div{height:1px;background:linear-gradient(90deg,transparent,var(--bdr),transparent);margin:0 40px}
+.hero{position:relative;z-index:1;text-align:center;padding:70px 40px 30px;overflow:hidden}
+.hero-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:500px;pointer-events:none;background:radial-gradient(ellipse,rgba(108,92,231,.08) 0%,transparent 65%)}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;margin-bottom:26px;font-size:.68rem;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(0,206,201,.22);background:rgba(0,206,201,.05);padding:6px 16px;border-radius:99px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:blink 1.6s infinite}
+.hero h1{font-family:var(--display);font-size:clamp(2.4rem,5vw,4.2rem);font-weight:800;line-height:1.05;letter-spacing:-2.5px;margin-bottom:16px}
+.hero h1 em{font-style:normal;background:linear-gradient(120deg,var(--accent) 0%,var(--cyan) 45%,var(--accent) 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s linear infinite}
+.hero p{color:var(--txt2);font-size:.94rem;max-width:560px;margin:0 auto;line-height:1.85}
+
+/* ===== ORG TREE ===== */
+.org-wrap{position:relative;z-index:1;max-width:1000px;margin:56px auto 10px;display:flex;flex-direction:column;align-items:center}
+.org-root{background:var(--surf);border:1.5px solid var(--accent);border-radius:var(--r2);padding:16px 30px;display:flex;align-items:center;gap:12px;box-shadow:0 0 30px var(--accentg)}
+.org-root .oimg{width:36px;height:36px;border-radius:9px;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--cyan));display:flex;align-items:center;justify-content:center}
+.org-root .oimg img{width:100%;height:100%;object-fit:cover}
+.org-root .otxt{text-align:left}
+.org-root .otxt b{font-family:var(--display);font-size:1rem;letter-spacing:-.3px}
+.org-root .otxt span{font-size:.68rem;color:var(--txt2)}
+.org-trunk{width:2px;height:36px;background:linear-gradient(var(--accent),var(--bdr2));animation:pulseLine 2.4s ease-in-out infinite}
+.org-branches{position:relative;width:100%;display:flex;justify-content:center}
+.org-branches::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);height:2px;background:var(--bdr2)}
+@media(min-width:640px){.org-branches{gap:60px}}
+.org-leaf{display:flex;flex-direction:column;align-items:center;gap:0}
+.org-leaf-line{width:2px;height:26px;background:var(--bdr2)}
+
+/* ===== SUBSIDIARY GRID ===== */
+.sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.sub-card{position:relative;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);padding:26px;transition:all .3s;animation:fadeUp .5s ease both;overflow:hidden;display:flex;flex-direction:column}
+.sub-card:hover{border-color:var(--accent);transform:translateY(-5px);box-shadow:0 16px 48px rgba(108,92,231,.13)}
+.sub-card.locked{opacity:.55;cursor:default}
+.sub-card.locked:hover{transform:none;border-color:var(--bdr);box-shadow:none}
+.sub-glow{position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;filter:blur(30px);opacity:.35;pointer-events:none}
+.sub-top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sub-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;border:1px solid var(--bdr2)}
+.sub-name{font-family:var(--display);font-weight:800;font-size:1.08rem;letter-spacing:-.3px}
+.sub-tag{font-size:.63rem;color:var(--txt3);letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+.sub-desc{color:var(--txt2);font-size:.82rem;line-height:1.7;margin-bottom:16px;flex:1}
+.sub-status{display:inline-flex;align-items:center;gap:6px;font-size:.63rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;padding:4px 10px;border-radius:99px;width:fit-content;margin-bottom:14px}
+.sub-status.live{color:var(--grn);background:var(--grng);border:1px solid rgba(0,184,148,.3)}
+.sub-status.soon{color:var(--txt3);background:var(--surf2);border:1px solid var(--bdr2)}
+.sub-status .sdot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.sub-status.live .sdot{animation:blink 1.5s infinite}
+.sub-arrow{color:var(--accent);font-size:.78rem;font-weight:700}
+.sub-card.locked .sub-arrow{color:var(--txt3)}
+.sub-focus{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.sub-focus span{font-size:.6rem;padding:2px 8px;border-radius:99px;background:var(--surf3);color:var(--txt3);border:1px solid var(--bdr2)}
+
+/* ===== HOW IT WORKS ===== */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:17px}
+.how-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);padding:22px 20px;transition:all .3s}
+.how-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.how-num{font-family:var(--display);font-size:.72rem;color:var(--accent);font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.how-title{font-size:.9rem;font-weight:700;margin-bottom:6px;font-family:var(--display)}
+.how-desc{font-size:.78rem;color:var(--txt2);line-height:1.65}
+
+/* ===== SUGGEST BOX ===== */
+.suggest-box{background:linear-gradient(135deg,var(--surf),var(--surf2));border:1px solid var(--bdr2);border-radius:var(--r2);padding:32px;text-align:center}
+.suggest-box h3{font-family:var(--display);font-size:1.15rem;font-weight:800;margin-bottom:8px}
+.suggest-box p{color:var(--txt2);font-size:.85rem;max-width:480px;margin:0 auto 18px;line-height:1.7}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--bdr);padding:36px;text-align:center}
+.footer-logo{font-family:var(--display);font-size:.95rem;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
+.footer-logo em{font-style:normal;color:var(--cyan)}
+footer p{font-size:.73rem;color:var(--txt3);line-height:1.85}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+@media(max-width:900px){
+  header{padding:0 16px}nav{display:none}.section{padding:56px 16px}.hero{padding:56px 16px 20px}
+  .sec-div{margin:0 16px}.org-wrap{margin:40px auto 10px}
+}
+</style>
+<script>
+(function(){
+  var req=new XMLHttpRequest();req.open('GET','maintenance.js?t='+Date.now(),false);
+  req.setRequestHeader('Cache-Control','no-cache, no-store, must-revalidate');req.setRequestHeader('Pragma','no-cache');req.setRequestHeader('Expires','0');
+  try{req.send(null);}catch(e){return;}
+  if(req.status===200){var text=req.responseText;var m=text.match(/IS_MAINTENANCE\s*=\s*(true|false)/);if(m&&m[1]==='true'){window.location.replace('index.html');}}
+})();
+</script>
+</head>
+<body>
+
+<header>
+  <a href="home.html" class="logo">
+    <div class="logo-img"><img src="CW_Logo.png" alt="CW" onerror="this.parentElement.textContent='⚡'"></div>
+    CapWorks
+  </a>
+  <nav style="position:absolute;left:50%;transform:translateX(-50%)">
+    <a href="home.html">Accueil</a>
+    <a href="projects.html">Projets</a>
+    <a href="campagnes.html">Campagnes</a>
+    <a href="societes.html" class="active">Sous-sociétés</a>
+    <a href="helfos.html">Helfos</a>
+    <a href="home.html#team">Équipe</a>
+    <a href="home.html#contact">Contact</a>
+  </nav>
+  <a href="home.html" class="btn btn-ghost btn-sm">← Accueil</a>
+</header>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge"><div class="dot"></div> Groupe CapWorks</div>
+  <h1>Nos <em>sous-sociétés</em></h1>
+  <p>CapWorks se structure en plusieurs pôles spécialisés, chacun avec son identité et son domaine d'expertise, tout en restant uni autour des mêmes valeurs.</p>
+</section>
+
+<div class="org-wrap">
+  <div class="org-root">
+    <div class="oimg"><img src="CW_Logo.png" alt="CW" onerror="this.parentElement.textContent='⚡'"></div>
+    <div class="otxt"><b>CapWorks</b><br><span>Maison mère</span></div>
+  </div>
+  <div class="org-trunk"></div>
+  <div class="org-branches" id="orgBranches" style="gap:40px"></div>
+</div>
+
+<section class="section" id="societes">
+  <div class="sub-grid" id="subGrid">
+
+    <a href="capworks-studio.html" class="sub-card" style="animation-delay:.05s">
+      <div class="sub-glow" style="background:#c84b7a"></div>
+      <div class="sub-top">
+        <div class="sub-ico" style="background:rgba(200,75,122,.14);color:#c84b7a">🎬</div>
+        <div>
+          <div class="sub-name">CapWorks Studio</div>
+          <div class="sub-tag">Pôle artistique</div>
+        </div>
+      </div>
+      <div class="sub-status live"><span class="sdot"></span>Actif</div>
+      <div class="sub-desc">Animation 2D/3D, courts-métrages, motion design et composition musicale. Le pôle créatif de CapWorks donne vie aux univers visuels et sonores.</div>
+      <div class="sub-focus"><span>Animation</span><span>Musique</span><span>Motion Design</span></div>
+      <div class="sub-arrow">Découvrir →</div>
+    </a>
+
+    <div class="sub-card locked" style="animation-delay:.1s">
+      <div class="sub-glow" style="background:#00cec9"></div>
+      <div class="sub-top">
+        <div class="sub-ico" style="background:rgba(0,206,201,.12);color:#00cec9">🧩</div>
+        <div>
+          <div class="sub-name">Nouvelle branche</div>
+          <div class="sub-tag">Domaine à définir</div>
+        </div>
+      </div>
+      <div class="sub-status soon"><span class="sdot"></span>Bientôt</div>
+      <div class="sub-desc">Un futur pôle CapWorks est en réflexion. Revenez bientôt pour découvrir cette prochaine sous-société.</div>
+      <div class="sub-arrow">À venir</div>
+    </div>
+
+    <div class="sub-card locked" style="animation-delay:.15s">
+      <div class="sub-glow" style="background:#fdcb6e"></div>
+      <div class="sub-top">
+        <div class="sub-ico" style="background:rgba(253,203,110,.12);color:#fdcb6e">✨</div>
+        <div>
+          <div class="sub-name">Nouvelle branche</div>
+          <div class="sub-tag">Domaine à définir</div>
+        </div>
+      </div>
+      <div class="sub-status soon"><span class="sdot"></span>Bientôt</div>
+      <div class="sub-desc">L'aventure CapWorks continue de grandir. Une place est réservée ici pour votre prochaine idée de pôle.</div>
+      <div class="sub-arrow">À venir</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="sec-div"></div>
+
+<section class="section">
+  <div class="sec-head"><span class="sec-tag">// fonctionnement</span><h2>Comment ça marche ?</h2><p>Chaque sous-société CapWorks fonctionne comme un pôle autonome, avec son propre site, son équipe et son identité visuelle.</p></div>
+  <div class="how-grid">
+    <div class="how-card"><div class="how-num">01</div><div class="how-title">Identité propre</div><div class="how-desc">Chaque pôle a son propre nom, logo et thème visuel, tout en gardant les codes graphiques CapWorks.</div></div>
+    <div class="how-card"><div class="how-num">02</div><div class="how-title">Domaine dédié</div><div class="how-desc">Un pôle = un domaine d'expertise clair, pour que chacun trouve rapidement ce qu'il cherche.</div></div>
+    <div class="how-card"><div class="how-num">03</div><div class="how-title">Équipe & support</div><div class="how-desc">Chaque sous-société peut avoir sa propre équipe, tout en profitant du support commun CapWorks.</div></div>
+    <div class="how-card"><div class="how-num">04</div><div class="how-title">Croissance du groupe</div><div class="how-desc">De nouvelles sous-sociétés apparaissent au fil des projets et des besoins de la communauté.</div></div>
+  </div>
+</section>
+
+<div class="sec-div"></div>
+
+<section class="section">
+  <div class="suggest-box">
+    <h3>💡 Une idée de sous-société ?</h3>
+    <p>Vous pensez qu'un nouveau pôle aurait sa place chez CapWorks ? Partagez votre idée avec l'équipe sur Discord ou par email.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="https://discord.gg/RSnKYzXsgm" target="_blank" class="btn btn-ghost">💬 Proposer sur Discord</a>
+      <a href="mailto:capkychannel@gmail.com" class="btn btn-ghost">📧 Envoyer un email</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
+    <img src="https://raw.githubusercontent.com/Capky/CapWorks-Company/main/CW_Logo.png" alt="CW" style="width:28px;height:28px;border-radius:7px" onerror="this.style.display='none'">
+    <div class="footer-logo">CapWorks</div>
+  </div>
+  <p>Développement sur mesure &nbsp;·&nbsp; Tous droits réservés<br><a href="https://discord.gg/RSnKYzXsgm" target="_blank">Discord CapWorks</a> &nbsp;·&nbsp; <a href="home.html">Accueil</a></p>
+</footer>
+
+<script>
+/* Petites lignes de connexion entre le tronc et chaque carte, purement visuel */
+(function(){
+  const branches = document.getElementById('orgBranches');
+  const cards = document.querySelectorAll('.sub-card');
+  cards.forEach(()=>{ const leaf=document.createElement('div'); leaf.className='org-leaf'; leaf.innerHTML='<div class="org-leaf-line"></div>'; branches.appendChild(leaf); });
+})();
+</script>
+</body>
+</html>
