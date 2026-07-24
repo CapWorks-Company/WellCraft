@@ -988,83 +988,6 @@
     line-height: 1.55;
   }
 
-  /* ---------- Parrainage ---------- */
-  .referral-section {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 3.5rem 1.5rem;
-    text-align: center;
-  }
-  .referral-box {
-    background: var(--bg-panel);
-    border: 3px solid var(--ink);
-    border-radius: 12px;
-    padding: 1.75rem;
-    margin-top: 1rem;
-    box-shadow: var(--shadow-hard);
-    text-align: left;
-  }
-  .referral-label {
-    display: block;
-    font-size: 0.7rem;
-    color: var(--gold);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 0.5rem;
-  }
-  .referral-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-  .referral-form input {
-    flex: 1 1 200px;
-    background: var(--bg-panel-light);
-    border: 3px solid var(--ink);
-    border-radius: 8px;
-    padding: 0.7rem 0.9rem;
-    color: var(--parchment);
-    font-family: 'Rubik', sans-serif;
-    font-size: 0.95rem;
-  }
-  .referral-form input::placeholder { color: var(--parchment-dark); }
-  .referral-form input:focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; }
-  .referral-result {
-    margin-top: 1.25rem;
-    background: var(--bg-panel-light);
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    padding: 0.9rem 1rem;
-  }
-  .referral-link-row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 0.3rem;
-  }
-  .referral-link-row .ip-box-value { word-break: break-all; }
-  .referral-perks {
-    list-style: none;
-    margin: 1.5rem 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-  .referral-perks li {
-    font-size: 0.88rem;
-    color: var(--parchment);
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  .referral-perks li::before {
-    content: "★";
-    color: var(--gold);
-    flex-shrink: 0;
-  }
-
   /* ---------- Footer ---------- */
   footer {
     border-top: 3px solid var(--ink);
@@ -1121,7 +1044,7 @@
       <div class="ip-box bracketed">
         <div>
           <span class="ip-box-label">Adresse du serveur (1.21.4 Java Edition)</span>
-          <span class="ip-box-value" id="server-ip">play.wellcraft.fr</span>
+          <span class="ip-box-value" id="server-ip">wellcraft.mine.fun</span>
         </div>
         <button class="copy-btn" id="copy-btn" type="button">Copier l'IP</button>
       </div>
@@ -1292,35 +1215,6 @@
 <section class="faq-section" id="faq">
   <h2 class="pixel">Questions fréquentes</h2>
   <div class="faq-list" id="faq-list"></div>
-</section>
-
-<div class="block-divider"></div>
-
-<section class="referral-section" id="parrainage">
-  <div class="news-header">
-    <div class="news-header-icon">🎁</div>
-    <h2 class="pixel">Système de parrainage</h2>
-    <p>Parraine tes amis et gagnez tous les deux des récompenses en jeu !</p>
-  </div>
-  <div class="referral-box bracketed">
-    <label for="referral-input" class="referral-label">Ton pseudo Minecraft</label>
-    <div class="referral-form">
-      <input type="text" id="referral-input" placeholder="Ex: Steve_92" maxlength="16" autocomplete="off">
-      <button class="copy-btn" id="referral-generate" type="button">Générer mon lien</button>
-    </div>
-    <div class="referral-result" id="referral-result" hidden>
-      <span class="ip-box-label">Ton lien de parrainage</span>
-      <div class="referral-link-row">
-        <span class="ip-box-value" id="referral-link"></span>
-        <button class="copy-btn" id="referral-copy" type="button">Copier</button>
-      </div>
-    </div>
-    <ul class="referral-perks">
-      <li>Ton filleul reçoit un pack de bienvenue avec des ressources de départ.</li>
-      <li>Toi, tu gagnes des Coins bonus dès sa première connexion.</li>
-      <li>Cumule les parrainages pour débloquer des cosmétiques exclusifs.</li>
-    </ul>
-  </div>
 </section>
 
 <div class="block-divider"></div>
@@ -1873,59 +1767,6 @@
     });
   }
   renderFaq();
-
-  // ============================================================
-  // SYSTÈME DE PARRAINAGE — génère un lien à partager à partir du
-  // pseudo saisi. Ceci reste un générateur côté client : pour suivre
-  // réellement les parrainages (et distribuer les récompenses), il
-  // faudra brancher ce formulaire à un petit back-end / plugin serveur.
-  // ============================================================
-  (function setupReferral() {
-    const input = document.getElementById('referral-input');
-    const genBtn = document.getElementById('referral-generate');
-    const result = document.getElementById('referral-result');
-    const linkEl = document.getElementById('referral-link');
-    const copyBtn = document.getElementById('referral-copy');
-    if (!input || !genBtn) return;
-
-    genBtn.addEventListener('click', () => {
-      const pseudo = input.value.trim();
-      if (!pseudo) {
-        input.focus();
-        return;
-      }
-      const clean = pseudo.replace(/[^a-zA-Z0-9_]/g, '');
-      const link = `https://play.wellcraft.fr/?ref=${clean}`;
-      linkEl.textContent = link;
-      result.hidden = false;
-    });
-
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') genBtn.click();
-    });
-
-    copyBtn?.addEventListener('click', async () => {
-      const text = linkEl.textContent;
-      if (!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch (e) {
-        const tmp = document.createElement('textarea');
-        tmp.value = text;
-        document.body.appendChild(tmp);
-        tmp.select();
-        document.execCommand('copy');
-        document.body.removeChild(tmp);
-      }
-      const original = copyBtn.textContent;
-      copyBtn.textContent = 'Copié !';
-      copyBtn.classList.add('copied');
-      setTimeout(() => {
-        copyBtn.textContent = original;
-        copyBtn.classList.remove('copied');
-      }, 1800);
-    });
-  })();
 
   // Révélation des cartes au scroll
   const cards = document.querySelectorAll('.card, .grade-card');
