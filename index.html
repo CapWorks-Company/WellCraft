@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WellCraft — Serveur Minecraft</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">
+    <img src="logo2.png" alt="WC">
+    <span class="pixel">WellCraft</span>
+  </div>
+
+  <div class="nav-status" id="nav-status">
+    <div class="torch offline" id="nav-torch">
+      <div class="torch-flame"></div>
+      <div class="torch-stick"></div>
+    </div>
+    <span id="nav-status-text">Vérification…</span>
+  </div>
+
+  <div class="nav-right">
+    <a class="nav-discord" href="https://discord.gg/cv6xxruz5G" target="_blank" rel="noopener" aria-label="Rejoindre le Discord">
+      <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.673-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419z"/></svg>
+    </a>
+  </div>
+</nav>
+
+<div class="page-nav">
+  <a class="page-nav-link active" href="index.html">🏠 Accueil</a>
+  <a class="page-nav-link" href="nouveautes.html">📜 Nouveautés</a>
+  <a class="page-nav-link" href="crafts.html">⚗️ Crafts spéciaux</a>
+  <a class="page-nav-link" href="fonctionnalites.html">🛠️ Fonctionnalités &amp; Commandes</a>
+</div>
+
+<header class="hero" id="rejoindre">
+  <div class="embers" id="embers"></div>
+
+  <div class="banner-frame">
+    <div class="banner-frame-inner">
+      <img src="banniere_2.png" alt="Bannière WellCraft">
+    </div>
+  </div>
+
+  <div class="hero-inner">
+    <span class="hero-eyebrow pixel">SERVEUR MINECRAFT</span>
+    <p class="hero-tagline">Survie, territoires et mini-jeux sur un monde qui grandit avec sa communauté. Copie l'adresse et rejoins la partie.</p>
+
+    <div class="connect-panel">
+      <div class="ip-box bracketed">
+        <div>
+          <span class="ip-box-label">Adresse du serveur (1.21.4 Java Edition)</span>
+          <span class="ip-box-value" id="server-ip">wellcraft.mine.fun</span>
+        </div>
+        <button class="copy-btn" id="copy-btn" type="button">Copier l'IP</button>
+      </div>
+
+      <div class="status-box bracketed">
+        <div class="torch offline" id="torch">
+          <div class="torch-flame"></div>
+          <div class="torch-stick"></div>
+        </div>
+        <div class="status-text">
+          <strong id="status-count">—</strong>
+          <span id="status-label">Vérification du statut…</span>
+        </div>
+      </div>
+
+      <a class="discord-btn" href="https://discord.gg/cv6xxruz5G" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.673-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419z"/></svg>
+        Rejoindre le Discord
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="block-divider"></div>
+
+<section class="features">
+  <article class="card bracketed">
+    <div class="card-icon">⛏</div>
+    <h3 class="pixel">WELLWORLD &amp; WELLWAR</h3>
+    <p>Chaque mode a son propre gameplay : dans le WellWorld, construisez ensemble et faites de merveilleuses constructions. Dans le WellWar, c'est la guerre !</p>
+  </article>
+  <article class="card bracketed">
+    <div class="card-icon">🎮</div>
+    <h3 class="pixel">MINI-JEUX WELLGAMES</h3>
+    <p>Spleef, combat à la masse, arbalètes, montée de lave et plus encore. Vote pour ton mode préféré et rejoins la prochaine partie en quelques secondes.</p>
+  </article>
+  <article class="card bracketed">
+    <div class="card-icon">🤝</div>
+    <h3 class="pixel">COMMUNAUTÉ ACTIVE</h3>
+    <p>Un serveur pensé pour jouer à plusieurs : grades, équipes, marché et une communauté qui construit le monde avec toi.</p>
+  </article>
+  <article class="card bracketed">
+    <div class="card-icon">💰</div>
+    <h3 class="pixel">BOUTIQUE &amp; GRADES</h3>
+    <p>Une économie complète avec marché entre joueurs et des grades à débloquer au fil de ta progression sur le serveur.</p>
+    <a href="#grades" class="nav-link" style="margin-top: 0.6rem; color: var(--brick-deep); font-weight: 700;">Voir les grades ↓</a>
+  </article>
+</section>
+
+<div class="modes-strip" id="modes-strip">
+  <button class="mode-pill" data-mode="spleef" aria-expanded="false"><span class="mode-icon">⛏️</span> WellSpleef</button>
+  <button class="mode-pill" data-mode="hunt" aria-expanded="false"><span class="mode-icon">🎃</span> WellHunt</button>
+  <button class="mode-pill" data-mode="max" aria-expanded="false"><span class="mode-icon">🔨</span> WellMax</button>
+  <button class="mode-pill" data-mode="paint" aria-expanded="false"><span class="mode-icon">🎨</span> WellPaint</button>
+  <button class="mode-pill" data-mode="rise" aria-expanded="false"><span class="mode-icon">🌋</span> WellRise</button>
+  <button class="mode-pill" data-mode="color" aria-expanded="false"><span class="mode-icon">🌀</span> WellColor</button>
+  <button class="mode-pill" data-mode="bridge" aria-expanded="false"><span class="mode-icon">⌛</span> WellBridge</button>
+  <button class="mode-pill" data-mode="strike" aria-expanded="false"><span class="mode-icon">🌈</span> WellStrike</button>
+</div>
+
+<div class="mode-description-panel" id="mode-description-panel">
+  <div class="mode-description-inner">
+    <h3 id="mode-description-title"></h3>
+    <p id="mode-description-text"></p>
+  </div>
+</div>
+
+<div class="block-divider"></div>
+
+<section class="grades-section" id="grades">
+  <h2 class="pixel">Les grades</h2>
+  <p class="grades-intro">Grades valables <strong>1 mois</strong> à partir de l'achat. Paiement sécurisé, activation automatique sur le serveur.</p>
+  <div class="grades-grid" id="grades-grid"></div>
+</section>
+
+<div class="block-divider"></div>
+
+<section class="news-section" id="nouveautes">
+  <div class="news-header">
+    <div class="news-header-icon">📜</div>
+    <h2 class="pixel">Nouveautés</h2>
+    <p>La dernière mise à jour du serveur. Le reste ? Sur un calendrier, en un clic.</p>
+  </div>
+
+  <div class="news-preview" id="news-preview"></div>
+
+  <a class="discord-btn news-btn" href="nouveautes.html">
+    <span class="news-icon">🗓️</span>
+    Voir le calendrier complet
+  </a>
+</section>
+
+<div class="block-divider"></div>
+
+<section class="shop-section" id="boutique">
+  <div class="shop-frame" id="shop-frame">
+    <div class="shop-content">
+      <span class="shop-badge pixel">Bientôt disponible</span>
+      <h2 class="pixel">Boutique cosmétique</h2>
+      <p>Les grades sont disponibles juste au-dessus ⬆️ Cosmétiques et bonus additionnels arrivent très prochainement.</p>
+    </div>
+    <svg class="shop-chain" id="shop-chain" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="steelGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#eef0f2"/>
+          <stop offset="45%" stop-color="#9aa0a6"/>
+          <stop offset="55%" stop-color="#5c6066"/>
+          <stop offset="100%" stop-color="#2b2d30"/>
+        </linearGradient>
+      </defs>
+      <g id="chain-links"></g>
+    </svg>
+    <div class="shop-lock-wrap" id="shop-lock">
+      <svg viewBox="0 0 100 120" width="92" height="110" aria-hidden="true">
+        <defs>
+          <linearGradient id="lockBody" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#f4c542"/>
+            <stop offset="50%" stop-color="#c98a1f"/>
+            <stop offset="100%" stop-color="#7a5410"/>
+          </linearGradient>
+          <linearGradient id="lockShackle" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#eef0f2"/>
+            <stop offset="50%" stop-color="#9aa0a6"/>
+            <stop offset="100%" stop-color="#4a4d52"/>
+          </linearGradient>
+        </defs>
+        <path d="M30 55 V35 a20 20 0 0 1 40 0 V55" fill="none" stroke="url(#lockShackle)" stroke-width="11" stroke-linecap="round"/>
+        <path d="M30 55 V35 a20 20 0 0 1 40 0 V55" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="2"/>
+        <rect x="18" y="50" width="64" height="58" rx="10" fill="url(#lockBody)" stroke="#4a2f08" stroke-width="3"/>
+        <circle cx="50" cy="76" r="8" fill="#4a2f08"/>
+        <rect x="46" y="80" width="8" height="16" rx="3" fill="#4a2f08"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="block-divider"></div>
+
+<section class="gallery-section" id="galerie">
+  <div class="news-header">
+    <div class="news-header-icon">🖼️</div>
+    <h2 class="pixel">Galerie de constructions</h2>
+    <p>Les plus belles créations imaginées par la communauté WellWorld.</p>
+  </div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Fermer l'aperçu">✕</button>
+  <img src="" alt="Aperçu de la construction" id="lightbox-img">
+</div>
+
+<div class="block-divider"></div>
+
+<section class="event-section" id="evenement">
+  <div class="news-header">
+    <div class="news-header-icon">⏳</div>
+    <h2 class="pixel">Prochain évènement</h2>
+    <p>Tournois, lancements de saison, évènements spéciaux : le compte à rebours démarre ici.</p>
+  </div>
+  <div class="event-box" id="event-box"></div>
+</section>
+
+<div class="block-divider"></div>
+
+<section class="faq-section" id="faq">
+  <h2 class="pixel">Questions fréquentes</h2>
+  <div class="faq-list" id="faq-list"></div>
+</section>
+
+<div class="block-divider"></div>
+
+<section class="band">
+  <div class="band-banner">
+    <img src="banniere_1.png" alt="Bannière secondaire WellCraft">
+  </div>
+  <h2 class="pixel">Bâtissez, explorez, créez ensemble</h2>
+  <p>WellCraft, c'est un monde de survie persistant où chaque territoire compte, et une arène de mini-jeux où on se retrouve entre deux sessions de construction.</p>
+</section>
+  
+<footer>
+  <div class="foot-brand">
+    <img src="logo.png" alt="Logo WellCraft">
+    <span>WellCraft © 2026</span>
+  </div>
+  <span>Serveur Minecraft communautaire — Java Edition</span>
+</footer>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="site.js"></script>
+
+</body>
+</html>

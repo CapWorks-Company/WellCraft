@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Administration — WellCraft</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+
+<!--
+  IMPORTANT : cette page ne contient QUE l'écran de connexion tant que le
+  token n'a pas été validé par le serveur (POST /api/admin/verify).
+  Le panneau d'administration (#admin-app) reste vide et n'est rempli par
+  admin.js qu'après une réponse 200 du serveur — impossible à obtenir sans
+  connaître le vrai token, y compris via la console du navigateur.
+-->
+
+<div id="admin-login" class="admin-login-wrap">
+  <form id="admin-login-form" class="admin-login-card">
+    <div class="lock-icon">🔒</div>
+    <h1 class="pixel">Administration WellCraft</h1>
+    <p>Entre le token d'administration pour modifier le contenu du site.</p>
+    <input type="password" id="admin-token-input" autocomplete="off" placeholder="Token d'administration" required>
+    <div class="admin-error" id="admin-login-error"></div>
+    <button type="submit" class="btn btn-primary" id="admin-login-btn" style="width:100%;">Se connecter</button>
+  </form>
+</div>
+
+<div id="admin-app" class="hidden"></div>
+
+<div id="admin-toast" class="admin-toast"></div>
+
+<script src="data.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
