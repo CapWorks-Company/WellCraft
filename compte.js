@@ -18,7 +18,7 @@
 //
 // Remplace ensuite la valeur ci-dessous par l'URL de CE sous-domaine.
 // ============================================================
-window.ACCOUNT_API_BASE = "https://api.tondomaine.fr";
+window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
 
 (function () {
   const STORAGE_KEY = "wellcraft_account";
