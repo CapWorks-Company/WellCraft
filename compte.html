@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crafts spéciaux — WellCraft</title>
+<title>Mon compte — WellCraft</title>
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,23 +43,59 @@
 <div class="page-nav">
   <a class="page-nav-link" href="index.html">🏠 Accueil</a>
   <a class="page-nav-link" href="nouveautes.html">📜 Nouveautés</a>
-  <a class="page-nav-link active" href="crafts.html">⚗️ Crafts spéciaux</a>
+  <a class="page-nav-link" href="crafts.html">⚗️ Crafts spéciaux</a>
   <a class="page-nav-link" href="fonctionnalites.html">🛠️ Fonctionnalités &amp; Commandes</a>
-  <a class="page-nav-link" href="compte.html">🌐 Mon compte</a>
+  <a class="page-nav-link active" href="compte.html">🌐 Mon compte</a>
 </div>
 
 <div class="news-page-header">
   <a class="news-back-link" href="index.html">← Retour à l'accueil</a>
-  <div class="news-header-icon" style="margin: 0 auto 0.9rem;">⚗️</div>
-  <h1 class="pixel" style="font-size: 1.5rem; color: var(--gold); margin: 0 0 0.5rem; text-shadow: 0 2px 0 var(--ink);">Crafts spéciaux</h1>
+  <div class="news-header-icon" style="margin: 0 auto 0.9rem;">🌐</div>
+  <h1 class="pixel" style="font-size: 1.5rem; color: var(--gold); margin: 0 0 0.5rem; text-shadow: 0 2px 0 var(--ink);">Mon compte</h1>
   <p style="max-width: 46ch; margin: 0 auto; color: var(--parchment-dark); font-size: 0.92rem;">
-    Des recettes exclusives à WellCraft, en plus de celles de Minecraft vanilla.
+    Lie ton compte WellCraft pour voir ton solde et acheter des items directement depuis le site.
   </p>
-
-  <div class="news-filters" id="crafts-filters"></div>
 </div>
 
-<div class="crafts-grid" id="crafts-grid"></div>
+<!-- ═══ Écran 1 : pas encore connecté ═══ -->
+<section class="account-section" id="account-login" hidden>
+  <div class="account-login-card">
+    <h2 class="pixel">Se connecter depuis WellCraft</h2>
+    <ol class="account-steps">
+      <li>Connecte-toi sur le serveur Minecraft.</li>
+      <li>Tape la commande <code>/site</code> dans le chat.</li>
+      <li>Recopie le code affiché ci-dessous (valable quelques minutes).</li>
+    </ol>
+    <form id="link-form" class="account-link-form" autocomplete="off">
+      <input type="text" id="link-code-input" class="account-code-input" placeholder="CODE" maxlength="12" required>
+      <button type="submit" class="account-link-btn">Se connecter</button>
+    </form>
+    <p class="account-link-error" id="link-error" hidden></p>
+  </div>
+</section>
+
+<!-- ═══ Écran 2 : connecté ═══ -->
+<section class="account-section" id="account-dashboard" hidden>
+  <div class="account-card">
+    <img id="account-skin" class="account-skin" alt="Skin" width="72" height="72">
+    <div class="account-card-info">
+      <h2 class="pixel" id="account-name">—</h2>
+      <p class="account-balance">Solde : <strong id="account-balance">—</strong></p>
+    </div>
+    <button type="button" class="account-logout-btn" id="account-logout">Se déconnecter</button>
+  </div>
+
+  <div class="block-divider"></div>
+
+  <div class="news-header">
+    <div class="news-header-icon">🛒</div>
+    <h2 class="pixel">Boutique</h2>
+    <p>Achats payés directement avec ton argent en jeu — récupérables via <code>/mailbox</code>.</p>
+  </div>
+
+  <p class="account-shop-error" id="shop-error" hidden></p>
+  <div class="shop-grid" id="shop-grid"></div>
+</section>
 
 <div class="block-divider"></div>
 
@@ -74,7 +110,7 @@
 <script src="data.js"></script>
 <script src="loader.js"></script>
 <script src="common.js"></script>
-<script src="crafts-page.js"></script>
+<script src="compte.js"></script>
 
 </body>
 </html>

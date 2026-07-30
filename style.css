@@ -1137,3 +1137,144 @@ footer img { width: 24px; height: 24px; border-radius: 5px; image-rendering: pix
 @media (prefers-reduced-motion: reduce) {
   .loader-logo, .loader-dots span { animation: none; }
 }
+
+/* ============================================================
+   COMPTE.HTML — liaison de compte + boutique en argent en jeu
+   ============================================================ */
+.account-section { max-width: 900px; margin: 0 auto 3rem; padding: 0 1.2rem; }
+
+.account-login-card {
+  background: var(--parchment);
+  color: var(--ink);
+  border-radius: 12px;
+  box-shadow: var(--shadow-hard);
+  padding: 2rem;
+  max-width: 460px;
+  margin: 0 auto;
+  text-align: center;
+}
+.account-login-card h2 { margin: 0 0 1rem; font-size: 1.1rem; }
+.account-steps { text-align: left; font-size: 0.9rem; line-height: 1.7; margin: 0 0 1.4rem; padding-left: 1.3rem; }
+.account-steps code {
+  background: rgba(0,0,0,0.08); padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: 700;
+}
+.account-link-form { display: flex; gap: 0.6rem; }
+.account-code-input {
+  flex: 1;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 1rem;
+  padding: 0.75rem 0.5rem;
+  border: 2px solid var(--brick-deep);
+  border-radius: 8px;
+  background: #fffaf0;
+  color: var(--ink);
+}
+.account-code-input:focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; }
+.account-link-btn {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--gold);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--gold-deep);
+}
+.account-link-btn:hover { background: #ffd766; }
+.account-link-btn:active { transform: translateY(4px); box-shadow: none; }
+.account-link-error {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #7a1f1f;
+  background: rgba(180,80,44,0.12);
+  border: 1px solid var(--brick);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+
+.account-card {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  background: var(--parchment);
+  color: var(--ink);
+  border-radius: 12px;
+  box-shadow: var(--shadow-hard);
+  padding: 1.4rem 1.6rem;
+}
+.account-skin { border-radius: 8px; image-rendering: pixelated; box-shadow: 0 3px 0 rgba(0,0,0,0.25); }
+.account-card-info { flex: 1; }
+.account-card-info h2 { margin: 0 0 0.3rem; font-size: 1.15rem; }
+.account-balance { margin: 0; font-size: 0.95rem; color: var(--brick-deep); }
+.account-balance strong { color: var(--ink); }
+.account-logout-btn {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 0.6rem 1rem;
+  border: 2px solid var(--brick-deep);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--brick-deep);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.account-logout-btn:hover { background: var(--brick-deep); color: var(--parchment); }
+
+.account-shop-error {
+  max-width: 500px; margin: 0 auto 1rem; text-align: center;
+  font-size: 0.85rem; color: #7a1f1f;
+  background: rgba(180,80,44,0.12); border: 1px solid var(--brick);
+  border-radius: 8px; padding: 0.6rem 0.8rem;
+}
+.shop-loading, .shop-empty { text-align: center; color: var(--parchment-dark); font-size: 0.9rem; }
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.shop-item {
+  background: var(--parchment);
+  color: var(--ink);
+  border-radius: 10px;
+  box-shadow: var(--shadow-hard);
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+.shop-item-icon { width: 40px; height: 40px; image-rendering: pixelated; }
+.shop-item-name { font-weight: 700; font-size: 0.9rem; }
+.shop-item-category { font-size: 0.75rem; color: var(--brick-deep); margin-bottom: 0.3rem; }
+.shop-item-buy {
+  width: 100%;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 0.55rem 0.6rem;
+  border: none;
+  border-radius: 7px;
+  background: var(--green);
+  color: #fff;
+  cursor: pointer;
+  margin-top: auto;
+}
+.shop-item-buy:hover:not(:disabled) { filter: brightness(1.1); }
+.shop-item-buy:disabled { opacity: 0.7; cursor: default; }
+
+@media (max-width: 560px) {
+  .account-card { flex-direction: column; text-align: center; }
+  .account-link-form { flex-direction: column; }
+}
+
