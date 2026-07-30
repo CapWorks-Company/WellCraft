@@ -15,7 +15,7 @@
 // valeur ci-dessous par l'URL de TON Worker une fois déployé
 // (Cloudflare te la donne, ex: https://wellcraft-api.tonpseudo.workers.dev).
 // ============================================================
-window.API_BASE = "https://wellcraft-api.TON-COMPTE.workers.dev";
+window.API_BASE = "https://wellcraft.capkychannel.workers.dev";
 
 const DEFAULT_SITE_DATA = {
   serverIp: "wellcraft.mine.fun",
