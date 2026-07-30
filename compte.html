@@ -49,7 +49,6 @@
 </div>
 
 <div class="news-page-header">
-  <a class="news-back-link" href="index.html">← Retour à l'accueil</a>
   <div class="news-header-icon" style="margin: 0 auto 0.9rem;">🌐</div>
   <h1 class="pixel" style="font-size: 1.5rem; color: var(--gold); margin: 0 0 0.5rem; text-shadow: 0 2px 0 var(--ink);">Mon compte</h1>
   <p style="max-width: 46ch; margin: 0 auto; color: var(--parchment-dark); font-size: 0.92rem;">
@@ -58,14 +57,18 @@
 </div>
 
 <!-- ═══ Écran 1 : pas encore connecté ═══ -->
-<section class="account-section" id="account-login" hidden>
-  <div class="account-login-card">
-    <h2 class="pixel">Se connecter depuis WellCraft</h2>
+<section class="account-hero" id="account-login" hidden>
+  <div class="account-panel bracketed">
+    <div class="account-panel-icon">🔑</div>
+    <h2 class="pixel">Connexion depuis WellCraft</h2>
+    <p class="account-panel-sub">Trois étapes, ça prend 10 secondes.</p>
+
     <ol class="account-steps">
-      <li>Connecte-toi sur le serveur Minecraft.</li>
-      <li>Tape la commande <code>/site</code> dans le chat.</li>
-      <li>Recopie le code affiché ci-dessous (valable quelques minutes).</li>
+      <li><span class="step-num">1</span><span>Connecte-toi sur le serveur Minecraft</span></li>
+      <li><span class="step-num">2</span><span>Tape <code>/site</code> dans le chat</span></li>
+      <li><span class="step-num">3</span><span>Entre le code reçu ci-dessous</span></li>
     </ol>
+
     <form id="link-form" class="account-link-form" autocomplete="off">
       <input type="text" id="link-code-input" class="account-code-input" placeholder="CODE" maxlength="12" required>
       <button type="submit" class="account-link-btn">Se connecter</button>
@@ -75,13 +78,16 @@
 </section>
 
 <!-- ═══ Écran 2 : connecté ═══ -->
-<section class="account-section" id="account-dashboard" hidden>
-  <div class="account-card">
-    <img id="account-skin" class="account-skin" alt="Skin" width="72" height="72">
-    <div class="account-card-info">
-      <h2 class="pixel" id="account-name">—</h2>
-      <p class="account-balance">Solde : <strong id="account-balance">—</strong></p>
+<section class="account-hero" id="account-dashboard" hidden>
+  <div class="account-panel account-profile bracketed">
+    <img id="account-skin" class="account-skin" alt="Skin" width="84" height="84">
+    <h2 class="pixel" id="account-name">—</h2>
+
+    <div class="account-balance-badge">
+      <span class="account-balance-label">Solde en jeu</span>
+      <span class="account-balance-value" id="account-balance">—</span>
     </div>
+
     <button type="button" class="account-logout-btn" id="account-logout">Se déconnecter</button>
   </div>
 
