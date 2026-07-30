@@ -177,6 +177,14 @@
   // ÉTAPE 2 — une fois vérifié : on charge les données et on
   // construit le panneau d'administration (jamais avant).
   // ============================================================
+  // Structure vide utilisée UNIQUEMENT si la base KV n'a encore jamais été
+  // sauvegardée (aucune donnée par défaut, juste la forme attendue pour que
+  // l'admin puisse commencer à remplir le contenu depuis zéro).
+  const EMPTY_SITE_DATA = {
+    serverIp: "", grades: [], news: [], crafts: [], features: [],
+    commands: [], gallery: [], faqs: [], nextEvent: null, nextEventLabel: ""
+  };
+
   async function enterAdmin() {
     document.getElementById("admin-login").classList.add("hidden");
     const app = document.getElementById("admin-app");
@@ -188,18 +196,20 @@
       const res = await fetch(`${window.API_BASE}/api/data`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
       if (res.ok) {
         data = await res.json();
-      } else if (typeof DEFAULT_SITE_DATA !== "undefined") {
-        data = DEFAULT_SITE_DATA;
+      } else if (res.status === 404) {
+        // Base KV vide : 1ère utilisation, on part d'une structure vierge.
+        data = EMPTY_SITE_DATA;
       } else {
-        throw new Error("Aucune donnée disponible");
+        throw new Error("api_error");
       }
     } catch (e) {
-      if (typeof DEFAULT_SITE_DATA !== "undefined") {
-        data = DEFAULT_SITE_DATA;
-      } else {
-        app.innerHTML = `<div style="padding:2rem;text-align:center;">Impossible de charger les données.</div>`;
-        return;
-      }
+      app.innerHTML = `
+        <div style="padding:3rem 1.5rem;text-align:center;">
+          <p style="color:var(--parchment-dark);margin-bottom:1rem;">Impossible de contacter le serveur (Worker Cloudflare injoignable).</p>
+          <button class="btn btn-primary" id="admin-retry-btn">Réessayer</button>
+        </div>`;
+      document.getElementById("admin-retry-btn")?.addEventListener("click", enterAdmin);
+      return;
     }
 
     working = JSON.parse(JSON.stringify(data));
