@@ -41,10 +41,21 @@
     }
   }
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   function hideLoader() {
     loader.classList.add("loader-hidden");
   }
 
-  window.onSiteDataReady(hideLoader);
+  async function onReady() {
+    // Une fois vraiment connecté, on attend 1s avant de lancer le site (petite pause
+    // volontaire, plus agréable qu'une disparition instantanée du loader).
+    await sleep(1000);
+    hideLoader();
+  }
+
+  window.onSiteDataReady(onReady);
   window.onSiteDataError(showError);
 })();
