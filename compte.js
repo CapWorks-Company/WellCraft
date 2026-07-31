@@ -1,22 +1,9 @@
 // ============================================================
 // COMPTE.JS — liaison de compte WellCraft + boutique payée en argent en jeu.
 //
-// IMPORTANT — CONFIGURATION REQUISE :
-// Ceci parle à l'API embarquée dans le PLUGIN Minecraft (voir SiteApiServer.java côté serveur),
-// PAS au Worker Cloudflare de window.API_BASE (qui ne gère que le contenu du site : grades,
-// news, etc.). Il s'agit d'une API totalement différente, à héberger toi-même.
-//
-// Cette API tourne en HTTP simple sur le serveur de jeu (site.api-port dans config.yml, 28016
-// par défaut) — un site en HTTPS (donc presque à coup sûr le tien) ne peut PAS l'appeler
-// directement (le navigateur bloque ces appels "contenu mixte" par sécurité). Il faut un
-// reverse-proxy avec un certificat valide sur un sous-domaine, par exemple avec Caddy
-// (génère le certificat automatiquement) :
-//
-//     api.tondomaine.fr {
-//         reverse_proxy 127.0.0.1:28016
-//     }
-//
-// Remplace ensuite la valeur ci-dessous par l'URL de CE sous-domaine.
+// Ceci parle à ton Worker Cloudflare (qui relaie vers le plugin Minecraft) —
+// PAS à window.API_BASE (qui gère le contenu du site : grades, news, etc.),
+// c'est une route différente sur le même Worker.
 // ============================================================
 window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
 
@@ -67,8 +54,13 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
       invalid_token: "Session expirée, reconnecte-toi.",
       insufficient_funds: "Tu n'as pas assez d'argent en jeu pour cet achat.",
       item_not_found: "Cet article n'existe plus.",
-      server_error: "Le serveur n'a pas pu traiter la demande — réessaie plus tard."
+      server_error: "Le serveur n'a pas pu traiter la demande — réessaie plus tard.",
+      server_unreachable: "Impossible de joindre le serveur Minecraft pour le moment."
     }[code] || "Une erreur est survenue — le site n'arrive peut-être pas à joindre le serveur Minecraft.";
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
 
   // ── Liaison du compte ──────────────────────────────────
@@ -79,6 +71,10 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
     const code = linkCodeInput.value.trim();
     if (!code) return;
 
+    const btn = linkForm.querySelector(".account-link-btn");
+    btn.disabled = true;
+    btn.classList.add("is-loading");
+
     try {
       const data = await api("/link", { method: "POST", body: JSON.stringify({ code }) });
       setSession({ token: data.token, uuid: data.uuid, name: data.name });
@@ -86,6 +82,9 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
     } catch (err) {
       linkError.textContent = friendlyError(err.message);
       linkError.hidden = false;
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove("is-loading");
     }
   });
 
@@ -118,7 +117,7 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
 
   async function loadShop(token) {
     shopError.hidden = true;
-    shopGrid.innerHTML = `<p class="shop-loading">Chargement…</p>`;
+    shopGrid.innerHTML = `<p class="shop-loading">Chargement de la boutique…</p>`;
     try {
       const data = await api(`/shop?token=${encodeURIComponent(token)}`);
       renderShop(data);
@@ -129,10 +128,6 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
     }
   }
 
-  function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  }
-
   function renderShop(data) {
     const items = (data.categories || []).flatMap(cat =>
       cat.items.map(item => ({ ...item, categoryName: cat.name }))
@@ -141,13 +136,13 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
       shopGrid.innerHTML = `<p class="shop-empty">Aucun article disponible pour le moment.</p>`;
       return;
     }
-    shopGrid.innerHTML = items.map(item => `
-      <div class="shop-item" data-category="${item.categoryIndex}" data-slot="${item.gridSlot}">
+    shopGrid.innerHTML = items.map((item, i) => `
+      <div class="shop-item fade-in-up" style="animation-delay:${Math.min(i * 0.05, 0.5)}s" data-category="${item.categoryIndex}" data-slot="${item.gridSlot}">
         <div class="shop-item-icon" aria-hidden="true">📦</div>
         <div class="shop-item-name">${escapeHtml(item.name)}</div>
         <div class="shop-item-category">${escapeHtml(item.categoryName)}</div>
         <button type="button" class="shop-item-buy" data-category="${item.categoryIndex}" data-slot="${item.gridSlot}">
-          Acheter — ${item.price}
+          <span>Acheter</span><span class="shop-item-price">${item.price}</span>
         </button>
       </div>
     `).join("");
@@ -162,8 +157,8 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
     if (!session?.token) { showLogin(); return; }
 
     btn.disabled = true;
-    const originalText = btn.textContent;
-    btn.textContent = "…";
+    const original = btn.innerHTML;
+    btn.innerHTML = `<span>…</span>`;
 
     try {
       const result = await api("/purchase", {
@@ -176,13 +171,13 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
       });
       document.getElementById("account-balance").textContent =
         new Intl.NumberFormat("fr-FR").format(result.newBalance);
-      btn.textContent = "✔ Acheté !";
-      setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 1500);
-      // Rafraîchit le solde formaté correctement (avec le symbole/nom de la monnaie)
+      btn.innerHTML = `<span>✔ Acheté !</span>`;
+      btn.classList.add("bought");
+      setTimeout(() => { btn.innerHTML = original; btn.classList.remove("bought"); btn.disabled = false; }, 1600);
       refreshAccount();
     } catch (err) {
       alert(friendlyError(err.message));
-      btn.textContent = originalText;
+      btn.innerHTML = original;
       btn.disabled = false;
     }
   }
