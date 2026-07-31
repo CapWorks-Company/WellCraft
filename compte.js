@@ -88,14 +88,14 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
     }
   });
 
-  document.getElementById("account-logout")?.addEventListener("click", async () => {
+  document.getElementById("account-logout")?.addEventListener("click", () => {
     const session = getSession();
     clearSession();
-    showLogin();
     if (session?.token) {
-      try { await api("/unlink", { method: "POST", body: JSON.stringify({ token: session.token }) }); }
-      catch (e) { /* déconnexion locale déjà faite, tant pis si l'appel échoue */ }
+      // Best-effort : ne bloque pas la déconnexion si cet appel traîne ou échoue.
+      api("/unlink", { method: "POST", body: JSON.stringify({ token: session.token }) }).catch(() => {});
     }
+    location.reload();
   });
 
   // ── Compte + boutique ──────────────────────────────────
