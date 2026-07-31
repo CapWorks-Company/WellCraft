@@ -1180,6 +1180,12 @@ footer img { width: 24px; height: 24px; border-radius: 5px; image-rendering: pix
   padding: 0 1.2rem;
   text-align: center;
 }
+/* IMPORTANT : sans cette ligne, "hidden" ne masque plus rien sur cet élément — une règle
+   d'auteur (display: flex ci-dessus) passe toujours devant la règle par défaut du navigateur
+   pour [hidden], même à spécificité égale. D'où le bouton "Se déconnecter" qui semblait ne
+   rien faire : la session était bien effacée, mais l'écran de connexion restait invisible
+   "en dessous" du tableau de bord au lieu de prendre sa place. */
+.account-hero[hidden] { display: none; }
 
 /* Panneau sombre commun (connexion + profil) — même famille visuelle que
    .ip-box / .status-box de la page d'accueil. */
