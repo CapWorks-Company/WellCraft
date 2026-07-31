@@ -94,6 +94,7 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
     try {
       const data = await api("/link", { method: "POST", body: JSON.stringify({ code }) });
       setSession({ token: data.token, uuid: data.uuid, name: data.name });
+      if (typeof updateNavConnectButton === "function") updateNavConnectButton();
       await refreshAccount();
     } catch (err) {
       linkError.textContent = friendlyError(err.message);

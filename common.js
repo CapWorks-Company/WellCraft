@@ -72,6 +72,28 @@ async function refreshStatus() {
   applyStatus(status);
 }
 
+// ============================================================
+// BOUTON "Se connecter depuis WellCraft" (nav) — visible uniquement si le joueur n'a PAS de
+// compte lié (voir compte.js pour le détail de la liaison). Utilise la même clé localStorage,
+// donc reste synchronisé avec l'état réel de la session sans dépendre de compte.js lui-même
+// (ce bouton doit s'afficher/se cacher sur TOUTES les pages, pas seulement compte.html).
+// ============================================================
+function updateNavConnectButton() {
+  const btn = document.getElementById('nav-connect-btn');
+  if (!btn) return;
+  let hasSession = false;
+  try {
+    const raw = localStorage.getItem('wellcraft_account');
+    hasSession = !!(raw && JSON.parse(raw)?.token);
+  } catch (e) { hasSession = false; }
+  btn.style.display = hasSession ? 'none' : '';
+}
+updateNavConnectButton();
+// Si un autre onglet se connecte/déconnecte, on se met à jour aussi (storage event).
+window.addEventListener('storage', (e) => {
+  if (e.key === 'wellcraft_account') updateNavConnectButton();
+});
+
 onSiteDataReady(() => {
   const serverIpEl = document.getElementById('server-ip');
   if (serverIpEl) serverIpEl.textContent = SERVER_IP;

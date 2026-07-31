@@ -195,6 +195,29 @@ img { max-width: 100%; display: block; }
 .nav-discord:hover svg { fill: #7289ff; }
 .nav-right { display: flex; align-items: center; gap: 0.5rem; }
 
+.nav-connect-btn {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--gold);
+  border-radius: 999px;
+  color: var(--gold);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.nav-connect-btn:hover { background: var(--gold); color: var(--ink); }
+@media (max-width: 640px) {
+  /* Sur petit écran, la nav manque de place : on garde juste une icône-clé. */
+  .nav-connect-btn {
+    font-size: 0;
+    padding: 0.5rem;
+    width: 38px; height: 38px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav-connect-btn::before { content: "🔑"; font-size: 1rem; }
+}
+
 /* ---------- Corner brackets (façon slot d'inventaire) ---------- */
 .bracketed { position: relative; }
 .bracketed::before, .bracketed::after {
