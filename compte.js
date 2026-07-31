@@ -143,10 +143,7 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
     }
     shopGrid.innerHTML = items.map(item => `
       <div class="shop-item" data-category="${item.categoryIndex}" data-slot="${item.gridSlot}">
-        <!-- Icône best-effort (CDN tiers non garanti) — si l'image ne charge pas, on la masque
-             simplement et le nom de l'article suffit ; ce n'est jamais bloquant. -->
-        <img class="shop-item-icon" src="https://mc.nerothe.com/img/1.21/${item.material.toLowerCase()}.png"
-             alt="" onerror="this.style.display='none'">
+        <div class="shop-item-icon" aria-hidden="true">📦</div>
         <div class="shop-item-name">${escapeHtml(item.name)}</div>
         <div class="shop-item-category">${escapeHtml(item.categoryName)}</div>
         <button type="button" class="shop-item-buy" data-category="${item.categoryIndex}" data-slot="${item.gridSlot}">
