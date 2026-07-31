@@ -1433,6 +1433,32 @@ footer img { width: 24px; height: 24px; border-radius: 5px; image-rendering: pix
 }
 
 /* ── Boutique : grille symétrique, cartes façon .card ── */
+.shop-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  max-width: 980px;
+  margin: 0 auto 1.5rem;
+  padding: 0 1.2rem;
+}
+.shop-filter-btn {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.5rem 1.2rem;
+  border: 2px solid var(--gold);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--parchment);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.08s ease;
+}
+.shop-filter-btn:hover { background: rgba(244,197,66,0.15); }
+.shop-filter-btn:active { transform: translateY(2px); }
+.shop-filter-btn.active { background: var(--gold); color: var(--ink); }
+
 .shop-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 195px));
