@@ -1439,7 +1439,7 @@ footer img { width: 24px; height: 24px; border-radius: 5px; image-rendering: pix
   justify-content: center;
   gap: 1.1rem;
   max-width: 980px;
-  margin: 0 auto;
+  margin: 0 auto 2.5rem;
   padding: 0 1.2rem;
 }
 .shop-item {
