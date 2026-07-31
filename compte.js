@@ -32,8 +32,11 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
   const linkForm = document.getElementById("link-form");
   const linkCodeInput = document.getElementById("link-code-input");
   const linkError = document.getElementById("link-error");
+  const shopFilters = document.getElementById("shop-filters");
   const shopGrid = document.getElementById("shop-grid");
   const shopError = document.getElementById("shop-error");
+  let shopData = null;       // dernière réponse /shop reçue (pour ré-filtrer sans rappeler l'API)
+  let activeFilter = "all";  // "all" ou l'index (en string) d'une catégorie
 
   function showLogin() {
     loginSection.hidden = false;
@@ -45,7 +48,7 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
     dashboardSection.hidden = false;
     document.getElementById("account-skin").src = `https://mc-heads.net/avatar/${account.uuid}/100`;
     document.getElementById("account-name").textContent = stripColors(account.name);
-    document.getElementById("account-balance").textContent = stripColors(account.balanceFormatted);
+    document.getElementById("account-balance").textContent = stripLeadingSymbol(stripColors(account.balanceFormatted));
   }
 
   function friendlyError(code) {
@@ -68,6 +71,12 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
   // retire aussi ici, côté site, pour ne jamais les afficher tels quels à l'écran.
   function stripColors(str) {
     return String(str).replace(/[&§][0-9a-fk-orA-FK-OR]/g, "");
+  }
+
+  // Idem pour le symbole monétaire en tête ("✦ 766 728 Coins" → "766 728 Coins") — le site
+  // affiche déjà sa propre icône ✦ à côté du solde, pas la peine de l'avoir deux fois.
+  function stripLeadingSymbol(str) {
+    return String(str).replace(/^[^\p{L}\p{N}]+\s*/u, "").trim();
   }
 
   // ── Liaison du compte ──────────────────────────────────
@@ -136,9 +145,45 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
   }
 
   function renderShop(data) {
-    const items = (data.categories || []).flatMap(cat =>
-      cat.items.map(item => ({ ...item, categoryName: cat.name }))
-    );
+    const isFirstLoad = shopData === null;
+    shopData = data;
+    if (isFirstLoad) activeFilter = "all";
+    renderFilters();
+    renderGrid();
+  }
+
+  function renderFilters() {
+    const categories = shopData.categories || [];
+    if (categories.length <= 1) {
+      // Une seule catégorie (ou aucune) : les boutons de filtre n'ont pas d'intérêt.
+      shopFilters.innerHTML = "";
+      return;
+    }
+
+    const buttons = [{ index: "all", label: "Tout" }]
+      .concat(categories.map(cat => ({ index: String(cat.index), label: stripColors(cat.name) })));
+
+    shopFilters.innerHTML = buttons.map(b => `
+      <button type="button" class="shop-filter-btn${activeFilter === b.index ? " active" : ""}" data-filter="${b.index}">
+        ${escapeHtml(b.label)}
+      </button>
+    `).join("");
+
+    shopFilters.querySelectorAll(".shop-filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeFilter = btn.dataset.filter;
+        renderFilters();
+        renderGrid();
+      });
+    });
+  }
+
+  function renderGrid() {
+    const categories = shopData.categories || [];
+    const items = categories
+      .filter(cat => activeFilter === "all" || String(cat.index) === activeFilter)
+      .flatMap(cat => cat.items.map(item => ({ ...item, categoryName: cat.name })));
+
     if (!items.length) {
       shopGrid.innerHTML = `<p class="shop-empty">Aucun article disponible pour le moment.</p>`;
       return;
