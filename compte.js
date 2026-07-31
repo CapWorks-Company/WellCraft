@@ -44,8 +44,8 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
     loginSection.hidden = true;
     dashboardSection.hidden = false;
     document.getElementById("account-skin").src = `https://mc-heads.net/avatar/${account.uuid}/100`;
-    document.getElementById("account-name").textContent = account.name;
-    document.getElementById("account-balance").textContent = account.balanceFormatted;
+    document.getElementById("account-name").textContent = stripColors(account.name);
+    document.getElementById("account-balance").textContent = stripColors(account.balanceFormatted);
   }
 
   function friendlyError(code) {
@@ -61,6 +61,13 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
 
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  // Filet de sécurité : si le plugin envoie encore des codes couleur Minecraft bruts (&6, §6...)
+  // — par exemple si le serveur n'a pas encore été redéployé avec la version corrigée — on les
+  // retire aussi ici, côté site, pour ne jamais les afficher tels quels à l'écran.
+  function stripColors(str) {
+    return String(str).replace(/[&§][0-9a-fk-orA-FK-OR]/g, "");
   }
 
   // ── Liaison du compte ──────────────────────────────────
@@ -139,10 +146,12 @@ window.ACCOUNT_API_BASE = "https://wellcraft.capkychannel.workers.dev";
     shopGrid.innerHTML = items.map((item, i) => `
       <div class="shop-item fade-in-up" style="animation-delay:${Math.min(i * 0.05, 0.5)}s" data-category="${item.categoryIndex}" data-slot="${item.gridSlot}">
         <div class="shop-item-icon" aria-hidden="true">📦</div>
-        <div class="shop-item-name">${escapeHtml(item.name)}</div>
-        <div class="shop-item-category">${escapeHtml(item.categoryName)}</div>
+        <div class="shop-item-name">${escapeHtml(stripColors(item.name))}</div>
+        <div class="shop-item-category">${escapeHtml(stripColors(item.categoryName))}</div>
+        ${item.quantity > 1 ? `<div class="shop-item-qty">×${item.quantity}</div>` : ""}
         <button type="button" class="shop-item-buy" data-category="${item.categoryIndex}" data-slot="${item.gridSlot}">
-          <span>Acheter</span><span class="shop-item-price">${item.price}</span>
+          <span class="shop-item-buy-line1">Acheter en <strong>${item.quantity}</strong></span>
+          <span class="shop-item-buy-line2">pour <strong>${item.price}</strong></span>
         </button>
       </div>
     `).join("");
