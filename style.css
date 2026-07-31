@@ -1187,6 +1187,23 @@ footer img { width: 24px; height: 24px; border-radius: 5px; image-rendering: pix
    "en dessous" du tableau de bord au lieu de prendre sa place. */
 .account-hero[hidden] { display: none; }
 
+/* Conteneur large pour l'écran "connecté" (profil + boutique) — .account-hero reste étroit
+   (640px), pensé pour une carte seule (connexion), donc pas adapté à la grille boutique qui a
+   besoin de plus de place pour se centrer avec plusieurs articles par ligne. */
+.account-hero-wide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1040px;
+  margin: 0 auto 3rem;
+  padding: 0 1.2rem;
+  text-align: center;
+}
+.account-hero-wide[hidden] { display: none; }
+/* La carte de profil, elle, reste dans un .account-hero classique (étroit) imbriqué — mais sans
+   la marge basse (déjà gérée par le conteneur parent) ni le padding horizontal (déjà présent). */
+.account-hero--nested { margin: 0; padding: 0; }
+
 /* Panneau sombre commun (connexion + profil) — même famille visuelle que
    .ip-box / .status-box de la page d'accueil. */
 .account-panel {
