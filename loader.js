@@ -52,7 +52,7 @@
   async function onReady() {
     // Une fois vraiment connecté, on attend 1s avant de lancer le site (petite pause
     // volontaire, plus agréable qu'une disparition instantanée du loader).
-    await sleep(1000);
+    await sleep(300);
     hideLoader();
   }
 
