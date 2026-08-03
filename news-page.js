@@ -1,6 +1,6 @@
 onSiteDataReady(function () {
   const MONTHS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-  const labels = { nouveaute: "Nouveauté", amelioration: "Amélioration", correction: "Correction" };
+  const labels = { nouveaute: "Nouveauté", amelioration: "Amélioration", correction: "Correction", modification: "Modification" };
 
   // Transforme "24 juillet 2026" en objet Date exploitable par le calendrier
   function parseFrenchDate(str) {

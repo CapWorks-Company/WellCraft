@@ -38,13 +38,13 @@
     },
     news: {
       title: "Nouveautés",
-      hint: "Affichées dans l'ordre où elles apparaissent ici (la plus récente en premier).",
+      hint: "Affichées dans l'ordre où elles apparaissent ici. Les nouvelles entrées sont ajoutées en bas de la liste : c'est donc la DERNIÈRE entrée qui est considérée comme la plus récente (et affichée en aperçu sur la page d'accueil).",
       labelField: "title",
       itemLabel: n => n.title || "(sans titre)",
       blank: () => ({ date: "", type: "nouveaute", title: "Nouvelle entrée", text: "" }),
       fields: [
         { key: "date", label: "Date (ex: 26 juillet 2026)", type: "text" },
-        { key: "type", label: "Type", type: "select", options: ["nouveaute", "amelioration", "correction"] },
+        { key: "type", label: "Type", type: "select", options: ["nouveaute", "amelioration", "correction", "modification"] },
         { key: "title", label: "Titre", type: "text" },
         { key: "text", label: "Texte", type: "textarea" }
       ]

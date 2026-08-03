@@ -632,6 +632,7 @@ img { max-width: 100%; display: block; }
 .news-badge.nouveaute { background: var(--green); }
 .news-badge.amelioration { background: #4a6fa5; }
 .news-badge.correction { background: var(--brick); }
+.news-badge.modification { background: #8a4fae; }
 .news-date { display: block; font-size: 0.72rem; color: #6b5636; margin-bottom: 0.5rem; }
 .news-item p { margin: 0; font-size: 0.88rem; line-height: 1.55; }
 
@@ -769,6 +770,7 @@ img { max-width: 100%; display: block; }
 .calendar-dot.nouveaute { background: var(--green); }
 .calendar-dot.amelioration { background: #4a6fa5; }
 .calendar-dot.correction { background: var(--brick); }
+.calendar-dot.modification { background: #8a4fae; }
 .calendar-daylist {
   margin-top: 1.5rem;
   display: flex;

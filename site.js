@@ -30,8 +30,10 @@ function renderGrades() {
 function renderNewsPreview() {
   const list = document.getElementById('news-preview');
   if (!list) return;
-  const labels = { nouveaute: "Nouveauté", amelioration: "Amélioration", correction: "Correction" };
-  list.innerHTML = NEWS.slice(0, 1).map(item => `
+  const labels = { nouveaute: "Nouveauté", amelioration: "Amélioration", correction: "Correction", modification: "Modification" };
+  // Les entrées sont ajoutées à la fin du tableau (voir admin.js, "list.push"),
+  // donc la plus récente est la DERNIÈRE de NEWS, pas la première.
+  list.innerHTML = NEWS.slice(-1).map(item => `
     <div class="news-item">
       <div class="news-item-head">
         <span class="news-item-title">${item.title}</span>
