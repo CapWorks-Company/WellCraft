@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mon compte — WellCraft</title>
+<title>Carte du monde — WellCraft</title>
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,76 +46,35 @@
   <a class="page-nav-link" href="nouveautes.html">📜 Nouveautés</a>
   <a class="page-nav-link" href="crafts.html">⚗️ Crafts spéciaux</a>
   <a class="page-nav-link" href="fonctionnalites.html">🛠️ Fonctionnalités &amp; Commandes</a>
-  <a class="page-nav-link" href="carte.html">🗺️ Carte</a>
-  <a class="page-nav-link active" href="compte.html">🌐 Mon compte</a>
+  <a class="page-nav-link active" href="carte.html">🗺️ Carte</a>
+  <a class="page-nav-link" href="compte.html">🌐 Mon compte</a>
 </div>
 
-<div class="account-glow-bg" aria-hidden="true"></div>
-
 <div class="news-page-header">
-  <div class="news-header-icon account-header-icon" style="margin: 0 auto 0.9rem;">🌐</div>
-  <h1 class="pixel" style="font-size: 1.5rem; color: var(--gold); margin: 0 0 0.5rem; text-shadow: 0 2px 0 var(--ink);">Mon compte</h1>
+  <a class="news-back-link" href="index.html">← Retour à l'accueil</a>
+  <div class="news-header-icon" style="margin: 0 auto 0.9rem;">🗺️</div>
+  <h1 class="pixel" style="font-size: 1.5rem; color: var(--gold); margin: 0 0 0.5rem; text-shadow: 0 2px 0 var(--ink);">Carte du monde</h1>
   <p style="max-width: 46ch; margin: 0 auto; color: var(--parchment-dark); font-size: 0.92rem;">
-    Lie ton compte WellCraft pour voir ton solde et acheter des items directement depuis le site.
+    Explore les mondes de WellCraft en direct, construction par construction.
   </p>
 </div>
 
-<!-- ═══ Écran 1 : pas encore connecté ═══ -->
-<section class="account-hero" id="account-login" hidden>
-  <div class="account-panel bracketed fade-in-up">
-    <div class="account-panel-icon">🔑</div>
-    <h2 class="pixel">Connexion depuis WellCraft</h2>
-    <p class="account-panel-sub">Trois étapes, ça prend 10 secondes.</p>
-
-    <ol class="account-steps">
-      <li><span class="step-num">1</span><span>Connecte-toi sur le serveur Minecraft</span></li>
-      <li><span class="step-num">2</span><span>Tape <code>/site</code> dans le chat</span></li>
-      <li><span class="step-num">3</span><span>Entre le code reçu ci-dessous</span></li>
-    </ol>
-
-    <form id="link-form" class="account-link-form" autocomplete="off">
-      <input type="text" id="link-code-input" class="account-code-input" placeholder="CODE" maxlength="12" required>
-      <button type="submit" class="account-link-btn">
-        <span>Se connecter</span>
-      </button>
-    </form>
-    <p class="account-link-error" id="link-error" hidden></p>
+<div class="map-page-wrap">
+  <div class="map-toggle" id="map-toggle">
+    <button class="map-toggle-btn active" data-map="wellworld" type="button">🌳 WellWorld</button>
+    <button class="map-toggle-btn" data-map="wellworld_ressources" type="button">⛏️ WellWorld — Ressources</button>
+    <button class="map-toggle-btn" data-map="wellwar" type="button">⚔️ WellWar</button>
+    <button class="map-toggle-btn" data-map="wellwar_ressources" type="button">⛏️ WellWar — Ressources</button>
   </div>
-</section>
 
-<!-- ═══ Écran 2 : connecté ═══ -->
-<section class="account-hero-wide" id="account-dashboard" hidden>
-  <div class="account-hero account-hero--nested">
-    <div class="account-panel account-profile bracketed fade-in-up">
-      <div class="account-skin-wrap">
-        <img id="account-skin" class="account-skin" alt="Skin" width="84" height="84">
-      </div>
-      <h2 class="pixel" id="account-name">—</h2>
-
-      <div class="account-balance-badge">
-        <span class="account-balance-icon">✦</span>
-        <div class="account-balance-text">
-          <span class="account-balance-label">Solde en jeu</span>
-          <span class="account-balance-value" id="account-balance">—</span>
-        </div>
-      </div>
-
-      <button type="button" class="account-logout-btn" id="account-logout">Se déconnecter</button>
+  <div class="map-frame-wrap" id="map-frame-wrap">
+    <iframe id="map-frame" class="map-frame" title="Carte en direct du monde WellCraft" loading="lazy" allowfullscreen></iframe>
+    <div class="map-frame-empty" id="map-frame-empty">
+      <p>La carte n'est pas encore configurée.</p>
+      <span>Ajoute l'URL de la carte depuis le panneau d'administration (onglet « Serveur &amp; évènement »).</span>
     </div>
   </div>
-
-  <div class="block-divider"></div>
-
-  <div class="news-header">
-    <div class="news-header-icon">🛒</div>
-    <h2 class="pixel">Boutique</h2>
-    <p>Achats payés directement avec ton argent en jeu — récupérables via <code>/mailbox</code>.</p>
-  </div>
-
-  <p class="account-shop-error" id="shop-error" hidden></p>
-  <div class="shop-filters" id="shop-filters"></div>
-  <div class="shop-grid" id="shop-grid"></div>
-</section>
+</div>
 
 <div class="block-divider"></div>
 
@@ -130,7 +89,7 @@
 <script src="data.js"></script>
 <script src="loader.js"></script>
 <script src="common.js"></script>
-<script src="compte.js"></script>
+<script src="carte-page.js"></script>
 
 </body>
 </html>

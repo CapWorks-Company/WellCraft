@@ -44,6 +44,7 @@ function _applySiteData(data) {
   window.FAQS = data.faqs;
   window.NEXT_EVENT = data.nextEvent;
   window.NEXT_EVENT_LABEL = data.nextEventLabel;
+  window.MAP_URL = data.mapUrl || "";
   window.SITE_DATA_READY = true;
   _siteDataListeners.forEach(cb => cb(window.SITE_DATA));
 }
