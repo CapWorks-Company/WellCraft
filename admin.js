@@ -182,7 +182,7 @@
   // l'admin puisse commencer à remplir le contenu depuis zéro).
   const EMPTY_SITE_DATA = {
     serverIp: "", grades: [], news: [], crafts: [], features: [],
-    commands: [], gallery: [], faqs: [], nextEvent: null, nextEventLabel: "", mapUrl: ""
+    commands: [], gallery: [], faqs: [], nextEvent: null, nextEventLabel: ""
   };
 
   async function enterAdmin() {
@@ -440,12 +440,6 @@
       v => { working.nextEvent = v ? v : null; markDirty(); }
     ));
     body.appendChild(renderSimpleField("Nom de l'évènement", "text", working.nextEventLabel, v => { working.nextEventLabel = v; markDirty(); }));
-
-    const mapHint = el("p", { class: "field-hint" },
-      "URL de base de ta carte BlueMap (ex: https://carte.wellcraft.fr ou l'adresse du proxy Worker). Laisse vide pour masquer la page Carte."
-    );
-    body.appendChild(mapHint);
-    body.appendChild(renderSimpleField("URL de la carte (BlueMap)", "text", working.mapUrl || "", v => { working.mapUrl = v; markDirty(); }));
 
     card.appendChild(body);
     panel.appendChild(card);
