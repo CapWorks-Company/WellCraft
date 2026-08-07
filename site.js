@@ -232,7 +232,7 @@ const MODE_DESCRIPTIONS = {
     title: "WellDodge",
     text: "Des obstacles surgissent et foncent droit sur toi ! Saute, esquive et déplace-toi rapidement pour éviter chaque attaque. Combien de temps arriveras-tu à tenir ?"
   },
-  },
+  }
   strike: {
     icon: "🔫",
     title: "WellStrike",
