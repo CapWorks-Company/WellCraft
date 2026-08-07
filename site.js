@@ -224,8 +224,8 @@ const MODE_DESCRIPTIONS = {
   },
   sun: {
     icon: "☀️",
-    title: "WellBridge",
-    text: "Inspiré du célèbre jeu « 1, 2, 3, Soleil » de Squid Game. Avance lorsque le feu est vert, immobilise-toi lorsqu'il passe au rouge. Le premier à franchir la ligne d'arrivée remporte la victoire !"
+    title: "WellSun",
+    text: "Inspiré du célèbre jeu « 1, 2, 3, Soleil ». Avance lorsque le feu est vert, immobilise-toi lorsqu'il devient rouge. Le gagnant sera celui qui aura le meilleur réflexe !"
   },
   dodge: {
     icon: "🌈",
@@ -235,7 +235,7 @@ const MODE_DESCRIPTIONS = {
   strike: {
     icon: "🔫",
     title: "WellStrike",
-    text: "Vous avez 5 vies. Éliminez le maximum de joueur avec votre arbalète pour être le dernier à être en vie !"
+    text: "Vous avez 5 vies. Éliminez un maximum de joueurs avec votre arbalète pour être le dernier en vie !"
   }
 };
 
