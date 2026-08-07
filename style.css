@@ -178,7 +178,7 @@ img { max-width: 100%; display: block; }
 .discord-btn svg { width: 18px; height: 18px; fill: white; flex-shrink: 0; }
 
 /* Bouton Nouveautés (même gabarit que discord-btn, couleur dorée) */
-.news-btn { background: var(--gold-deep); }
+.news-btn { background: var(--gold-deep); margin-top: 1.75rem; }
 .news-btn:hover { background: var(--gold); color: var(--ink); }
 .news-btn .news-icon { font-size: 1.1rem; line-height: 1; }
 
