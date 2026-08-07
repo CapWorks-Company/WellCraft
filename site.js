@@ -222,15 +222,21 @@ const MODE_DESCRIPTIONS = {
     title: "WellColor",
     text: "Une couleur est annoncée... Fonce dessus avant tout le monde ! Les autres couleurs disparaîtront dans le vide. Réflexes et rapidité seront vos meilleurs alliés."
   },
-  bridge: {
-    icon: "⌛",
+  sun: {
+    icon: "☀️",
     title: "WellBridge",
     text: "Inspiré du célèbre jeu « 1, 2, 3, Soleil » de Squid Game. Avance lorsque le feu est vert, immobilise-toi lorsqu'il passe au rouge. Le premier à franchir la ligne d'arrivée remporte la victoire !"
   },
-  strike: {
+  dodge: {
     icon: "🌈",
-    title: "WellStrike",
+    title: "WellDodge",
     text: "Des obstacles surgissent et foncent droit sur toi ! Saute, esquive et déplace-toi rapidement pour éviter chaque attaque. Combien de temps arriveras-tu à tenir ?"
+  },
+  },
+  strike: {
+    icon: "🔫",
+    title: "WellStrike",
+    text: "Vous avez 5 vies. Éliminez le maximum de joueur avec votre arbalète pour être le dernier à être en vie !"
   }
 };
 
